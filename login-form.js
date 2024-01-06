@@ -1,4 +1,4 @@
-import { authenticate, getToken } from './auth.js'
+import { authenticate, getUserId } from './auth.js'
 
 customElements.define('login-form', class extends HTMLFormElement {
   constructor(){
@@ -7,7 +7,7 @@ customElements.define('login-form', class extends HTMLFormElement {
   }
 
   connectedCallback() {
-    if (getToken()) {
+    if (getUserId()) {
         window.location = '/list'
     }
 

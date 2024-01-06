@@ -7,11 +7,11 @@ customElements.define('delete-button', class extends HTMLElement {
   }
 
   connectedCallback() {
-    this.render()
+    render(this, this.render)
   }
 
-  render(){
-    render(this, () => html`
+  render = () => {
+    return html`
       <style>
         delete-button {
           display: flex;
@@ -26,6 +26,6 @@ customElements.define('delete-button', class extends HTMLElement {
           }
         })
       }}><i class="gg-trash"></i> Delete</button></div>
-    `)
+    `
   }
 })

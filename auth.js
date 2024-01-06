@@ -1,23 +1,23 @@
 import {loginBe} from './backend.js'
-const TOKEN = 'token'
+const USER_ID = 'userId'
 
-const setToken = token => {
-  window.localStorage.setItem(TOKEN, token)
+const setUserId = userId => {
+  window.localStorage.setItem(USER_ID, userId)
 }
 
-export const getToken = () => {
-  return window.localStorage.getItem(TOKEN)
+export const getUserId = () => {
+  return window.localStorage.getItem(USER_ID)
 }
 
 export const authenticate = (email, password) =>{
   return loginBe({email, password})
       .then(res => {
-        setToken(res.id)
+        setUserId(res.id)
       })
 }
 
 export const protectedPage = () => {
-  if (!getToken()) {
+  if (!getUserId()) {
     window.location = '/'
   }
 }

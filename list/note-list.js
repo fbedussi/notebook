@@ -1,7 +1,7 @@
 import { render, html, signal } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 import {searchTerm} from '../state.js'
 import { getNotes } from '../backend.js'
-import {getToken} from '../auth.js'
+import {getUserId} from '../auth.js'
 
 import '../delete-button.js'
 
@@ -12,7 +12,7 @@ customElements.define('note-list', class extends HTMLElement {
 
   connectedCallback() {
     this.notes = signal([])
-    getNotes(getToken(), this.notes)
+    getNotes(getUserId(), this.notes)
     render(this, this.render)
   }
 

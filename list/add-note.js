@@ -1,5 +1,5 @@
 import {addNote} from '../backend.js'
-import { getToken } from '../auth.js'
+import { getUserId } from '../auth.js'
 
 customElements.define('add-note', class extends HTMLFormElement {
   constructor(){
@@ -9,7 +9,7 @@ customElements.define('add-note', class extends HTMLFormElement {
   connectedCallback() {
     this.addEventListener('submit', e => {
       e.preventDefault()
-      addNote(getToken(), e.target[0].value)
+      addNote(getUserId(), e.target[0].value)
       e.target[0].value = ''
     })
   }
