@@ -1,0 +1,15 @@
+{
+  "name": "notebook",
+  "version": "1.0.0",
+  "description": "A simple personal notebook",
+  "main": "index.js",
+  "scripts": {
+    "start": "web-dev-server --node-resolve --open --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Francesco Bedussi",
+  "license": "ISC",
+  "devDependencies": {
+    "@web/dev-server": "^0.4.1"
+  }
+}

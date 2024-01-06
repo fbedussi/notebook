@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notebook</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
+</head>
+
+<body>
+  <main class="container">
+    <form is="login-form">
+      <label>
+        Username:
+        <input placeholder="foo@baz.xom" type="email"></input>
+      </label>
+      <label>
+        Password
+        <input type="password"></input>
+      </label>
+      <div><mark class="error-alert"></mark></div>
+      <button type="submit">add</button>
+    </form>
+  </main>
+
+  <script src="signals.js" type="module"></script>
+  <script src="state.js" type="module"></script>
+  <script src="login-form.js" type="module"></script>
+</body>
+
+</html>
