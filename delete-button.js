@@ -19,7 +19,13 @@ customElements.define('delete-button', class extends HTMLElement {
           gap: 0.5em;
         }
       </style>
-      <button onclick=${() => deleteNote(this.getAttribute('key'))}><i class="gg-trash"></i> Delete</button></div>
+      <button onclick=${() => {
+        deleteNote(this.getAttribute('id')).then(() => {
+          if (window.location.pathname !== '/list') {
+            window.location = '/list'
+          }
+        })
+      }}><i class="gg-trash"></i> Delete</button></div>
     `)
   }
 })
