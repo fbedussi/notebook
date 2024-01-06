@@ -14,7 +14,6 @@ import {
   addDoc, 
   deleteDoc,
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-import {notes} from './state.js'
 
 const firebaseConfig = {
   apiKey: "AIzaSyB-iin2A3RiV652mi3H1Y0PN-ErlL6HKY0",
@@ -75,7 +74,7 @@ export const logoutBe = async () => {
 
 const NOTES_COLLECTION_NAME = 'notes'
 
-export const getNotes = async (userId) => {
+export const getNotes = async (userId, notes) => {
   const q = query(collection(db, NOTES_COLLECTION_NAME), where("userId", "==", userId));
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const updatedNotes = [];
@@ -89,16 +88,26 @@ export const getNotes = async (userId) => {
   });
 }
 
+export const getNote = async (userId, id, note) => {
+  const q = query(collection(db, NOTES_COLLECTION_NAME), where("__name__", "==", id), where("userId", "==", userId));
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const updatedNotes = [];
+    querySnapshot.forEach((doc) => {
+      updatedNotes.push({
+        id: doc.id,
+        text: doc.data().text,
+      });
+    });
+    note.value = updatedNotes[0]
+  });
+  
+}
+
 export const addNote = async (userId, note) => {
   const docRef = await addDoc(collection(db, NOTES_COLLECTION_NAME), {
     userId,
     text: note,
   });
-
-  // notes.value = notes.value.concat({
-  //   id: docRef.id,
-  //   text: docRef.text,
-  // })
 }
 
 export const deleteNote = async id => {

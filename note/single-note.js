@@ -1,6 +1,5 @@
-import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
-import {notes} from '../state.js'
-import { getNotes } from '../backend.js'
+import { render, html, signal } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
+import { getNote } from '../backend.js'
 import {getToken} from '../auth.js'
 
 import '../delete-button.js'
@@ -13,13 +12,12 @@ customElements.define('single-note', class extends HTMLElement {
   connectedCallback() {
     const searchParams = new URLSearchParams(window.location.search)
     this.noteId = searchParams.get('id')
-    getNotes(getToken())
+    this.note = signal(null)
+    getNote(getToken(), this.noteId, this.note)
     render(this, this.render)
   }
 
   render = () => {
-      const note = notes.value
-            .find(note => note.id === this.noteId)
       return html`
         <style>
           single-note {
@@ -30,7 +28,7 @@ customElements.define('single-note', class extends HTMLElement {
           }
         </style>
         <article>
-          ${note?.text}
+          ${this.note.value?.text}
           <footer>
             <div><a href="/list"><i class="gg-arrow-left"></i> back</a></div>
             <delete-button id=${this.noteId}/> 

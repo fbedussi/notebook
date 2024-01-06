@@ -1,5 +1,5 @@
-import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
-import {notes, searchTerm} from '../state.js'
+import { render, html, signal } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
+import {searchTerm} from '../state.js'
 import { getNotes } from '../backend.js'
 import {getToken} from '../auth.js'
 
@@ -11,13 +11,14 @@ customElements.define('note-list', class extends HTMLElement {
   }
 
   connectedCallback() {
-    getNotes(getToken())
+    this.notes = signal([])
+    getNotes(getToken(), this.notes)
     render(this, this.render)
   }
 
   render = () => html`
       <div>
-        ${notes.value
+        ${this.notes.value
           .filter(note => searchTerm.value ? note.text.includes(searchTerm.value) : true)
           .map((note) => html`
             <article>
