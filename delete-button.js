@@ -11,7 +11,7 @@ customElements.define('delete-button', class extends HTMLElement {
   }
 
   render(){
-    render(this, html`
+    render(this, () => html`
       <style>
         delete-button {
           display: flex;

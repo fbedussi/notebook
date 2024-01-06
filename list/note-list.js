@@ -1,5 +1,4 @@
-import { render, html } from 'https://esm.run/uhtml'
-import {subscribeSignals} from '../signals.js'
+import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 import {notes, searchTerm} from '../state.js'
 import { getNotes } from '../backend.js'
 import {getToken} from '../auth.js'
@@ -12,12 +11,11 @@ customElements.define('note-list', class extends HTMLElement {
   }
 
   connectedCallback() {
-    subscribeSignals(this)
     getNotes(getToken())
+    render(this, this.render)
   }
 
-  render(){
-    render(this, html`
+  render = () => html`
       <div>
         ${notes.value
           .filter(note => searchTerm.value ? note.text.includes(searchTerm.value) : true)
@@ -28,6 +26,5 @@ customElements.define('note-list', class extends HTMLElement {
               <footer><a href=${`/note?id=${note.id}`}>Read more <i class="gg-arrow-right"></i></a></footer>
             </article>
           `)}
-      </div>`)
-  }
+      </div>`
 })

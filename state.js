@@ -1,8 +1,8 @@
+import { signal } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 //@ts-check
 
-import { createSignal } from './signals.js';
+export const notes = signal([])
 
-export const notes = createSignal([])
+export const searchTerm = signal('')
 
-export const searchTerm = createSignal('')
-
+export    const count = signal(0);
