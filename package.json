@@ -2,14 +2,15 @@
   "name": "notebook",
   "version": "1.0.0",
   "description": "A simple personal notebook",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "web-dev-server --node-resolve --open --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "author": "Francesco Bedussi",
   "license": "ISC",
   "devDependencies": {
-    "@web/dev-server": "^0.4.1"
+    "vite": "^5.0.8"
   }
 }

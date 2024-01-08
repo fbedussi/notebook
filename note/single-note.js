@@ -29,7 +29,7 @@ customElements.define('single-note', class extends HTMLElement {
     <article>
       ${this.note.value?.text}
       <footer>
-        <div><a href="/list"><i class="gg-arrow-left"></i> back</a></div>
+        <div><a href="/list/"><i class="gg-arrow-left"></i> back</a></div>
         <delete-button id=${this.noteId}/> 
       </footer>
     </article>
