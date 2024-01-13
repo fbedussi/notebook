@@ -113,3 +113,51 @@ export const addNote = async (userId, note) => {
 export const deleteNote = async id => {
   await deleteDoc(doc(db, NOTES_COLLECTION_NAME, id))
 }
+
+
+const tags = {}
+
+export const getCatFact = async (signal, tag, cleanups) => {
+  const cb = (event) => {
+    if (event.data.type === 'CACHE_ENTRY_INVALIDATED') {
+      placeCall()
+    }
+  }
+
+  const cleanup = () => {
+    navigator.serviceWorker.removeEventListener('message', cb)
+  }
+  cleanup()
+  cleanups.push(cleanup)
+
+  navigator.serviceWorker.startMessages()
+  navigator.serviceWorker.addEventListener('message', cb)
+  
+  const placeCall = () => {
+    const req = new Request('https://catfact.ninja/fact', {
+      method: 'GET'
+    })
+    
+    tags[tag] = {
+      url: req.url,
+      method: req.method,
+    }
+
+    fetch(req)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        signal.value = res.fact
+      })
+  }
+
+  placeCall()
+}
+
+export const invalidateCacheEntry = (tag) => {
+ navigator.serviceWorker.controller.postMessage({
+    type: 'INVALIDATE_CACHE_ENTRY',
+    req: tags[tag],
+  });
+}

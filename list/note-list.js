@@ -1,6 +1,6 @@
 import { render, html, signal } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 import {searchTerm} from '../state.js'
-import { getNotes } from '../backend.js'
+import { getNotes, getCatFact, invalidateCacheEntry } from '../backend.js'
 import {getUserId} from '../auth.js'
 
 import '../delete-button.js'
@@ -8,15 +8,29 @@ import '../delete-button.js'
 customElements.define('note-list', class extends HTMLElement {
   constructor(){
     super()
+    this.cleanups = []
   }
 
   connectedCallback() {
     this.notes = signal([])
     getNotes(getUserId(), this.notes)
+    this.catFact = signal('')
+    getCatFact(this.catFact, 'cat', this.cleanups)
     render(this, this.render)
   }
 
+  disconnectedCallback() {
+    this.cleanups.forEach(cleanup => cleanup())
+  }
+
   render = () => html`
+      <div>
+        <h1>Cat fact of the day</h1>
+        <p>${this.catFact.value}</p>
+        <button onclick=${() => {
+          invalidateCacheEntry('cat')
+        }}>change cat fact</button>
+      </div>
       <div>
         ${this.notes.value
           .filter(note => searchTerm.value ? note.text.includes(searchTerm.value) : true)
