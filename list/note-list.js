@@ -14,23 +14,11 @@ customElements.define('note-list', class extends HTMLElement {
   connectedCallback() {
     this.notes = signal([])
     getNotes(getUserId(), this.notes)
-    this.catFact = signal('')
-    getCatFact(this.catFact, 'cat', this.cleanups)
+
     render(this, this.render)
   }
 
-  disconnectedCallback() {
-    this.cleanups.forEach(cleanup => cleanup())
-  }
-
   render = () => html`
-      <div>
-        <h1>Cat fact of the day</h1>
-        <p>${this.catFact.value}</p>
-        <button onclick=${() => {
-          invalidateCacheEntry('cat')
-        }}>change cat fact</button>
-      </div>
       <div>
         ${this.notes.value
           .filter(note => searchTerm.value ? note.text.includes(searchTerm.value) : true)

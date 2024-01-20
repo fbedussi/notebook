@@ -4,14 +4,14 @@ import {
   signInWithEmailAndPassword, signOut
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js'
 import {
-  enableIndexedDbPersistence, 
-  getFirestore, 
-  collection, 
-  query, 
-  where, 
-  onSnapshot, 
+  enableIndexedDbPersistence,
+  getFirestore,
+  collection,
+  query,
+  where,
+  onSnapshot,
   doc,
-  addDoc, 
+  addDoc,
   deleteDoc,
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
 
@@ -100,7 +100,7 @@ export const getNote = async (userId, id, note) => {
     });
     note.value = updatedNotes[0]
   });
-  
+
 }
 
 export const addNote = async (userId, note) => {
@@ -112,52 +112,4 @@ export const addNote = async (userId, note) => {
 
 export const deleteNote = async id => {
   await deleteDoc(doc(db, NOTES_COLLECTION_NAME, id))
-}
-
-
-const tags = {}
-
-export const getCatFact = async (signal, tag, cleanups) => {
-  const cb = (event) => {
-    if (event.data.type === 'CACHE_ENTRY_INVALIDATED') {
-      placeCall()
-    }
-  }
-
-  const cleanup = () => {
-    navigator.serviceWorker.removeEventListener('message', cb)
-  }
-  cleanup()
-  cleanups.push(cleanup)
-
-  navigator.serviceWorker.startMessages()
-  navigator.serviceWorker.addEventListener('message', cb)
-  
-  const placeCall = () => {
-    const req = new Request('https://catfact.ninja/fact', {
-      method: 'GET'
-    })
-    
-    tags[tag] = {
-      url: req.url,
-      method: req.method,
-    }
-
-    fetch(req)
-      .then(res => {
-        return res.json()
-      })
-      .then(res => {
-        signal.value = res.fact
-      })
-  }
-
-  placeCall()
-}
-
-export const invalidateCacheEntry = (tag) => {
- navigator.serviceWorker.controller.postMessage({
-    type: 'INVALIDATE_CACHE_ENTRY',
-    req: tags[tag],
-  });
 }
