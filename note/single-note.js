@@ -1,12 +1,22 @@
 import { render, html, signal } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 import { getNote } from '../backend.js'
 import {getUserId} from '../auth.js'
+import {css} from '../custom-elements-utils.js'
 
 import '../delete-button.js'
 
 customElements.define('single-note', class extends HTMLElement {
   constructor(){
     super()
+
+    css`
+      single-note {
+        footer {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+    `
   }
 
   connectedCallback() {
@@ -18,14 +28,6 @@ customElements.define('single-note', class extends HTMLElement {
   }
 
   render = () => html`
-    <style>
-      single-note {
-        footer {
-          display: flex;
-          justify-content: space-between;
-        }
-      }
-    </style>
     <article>
       ${this.note.value?.text}
       <footer>

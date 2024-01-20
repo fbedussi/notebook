@@ -1,9 +1,21 @@
 import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 import { deleteNote } from './backend.js'
+import {css} from './custom-elements-utils.js'
 
 customElements.define('delete-button', class extends HTMLElement {
   constructor(){
     super()
+
+    css`
+      delete-button {
+        button {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 1em;
+        }
+      }
+    `
   }
 
   connectedCallback() {
@@ -14,13 +26,6 @@ customElements.define('delete-button', class extends HTMLElement {
     const dialog = { current: null }
 
     return html`
-      <style>
-        delete-button {
-          display: flex;
-          justify-content: space-between;
-          gap: 0.5em;
-        }
-      </style>
       <dialog ref=${dialog} show="false">
         <article>
           Do you really want to delete this note?

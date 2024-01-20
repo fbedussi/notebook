@@ -1,14 +1,29 @@
 import { render, html, signal } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 import {searchTerm} from '../state.js'
-import { getNotes, getCatFact, invalidateCacheEntry } from '../backend.js'
+import { getNotes } from '../backend.js'
 import {getUserId} from '../auth.js'
+import {css} from '../custom-elements-utils.js'
 
 import '../delete-button.js'
 
 customElements.define('note-list', class extends HTMLElement {
   constructor(){
     super()
-    this.cleanups = []
+
+    css`
+      note-list article {
+        footer {
+          display: flex;
+          justify-content: end;
+          
+          a {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+          }
+        }
+      }
+    `
   }
 
   connectedCallback() {
