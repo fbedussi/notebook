@@ -28,7 +28,7 @@ customElements.define('single-note', class extends HTMLElement {
 
   render = () => html`
     <article>
-      ${this.note.value?.text}
+      ${html([this.note.value?.text])}
       <footer>
         <div><a href="/notes/" is="a-route"><i class="gg-arrow-left"></i> back</a></div>
         <delete-button id=${this.noteId}/> 

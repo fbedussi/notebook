@@ -20,8 +20,8 @@ customElements.define('add-note', class extends HTMLFormElement {
   connectedCallback() {
     this.addEventListener('submit', e => {
       e.preventDefault()
-      addNote(getUserId(), e.target[0].value)
-      e.target[0].value = ''
+      addNote(getUserId(), editor.value)
+      editor.value = ''
     })
   }
 }, {

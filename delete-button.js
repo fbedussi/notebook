@@ -37,9 +37,10 @@ customElements.define('delete-button', class extends HTMLElement {
             </button>
             <button class="secondary" onclick=${() => {
               deleteNote(this.getAttribute('id')).then(() => {
-                if (window.location.pathname !== '/list') {
-                  window.location = '/list'
+                if (window.location.pathname !== '/notes/') {
+                  window.location = '/notes/'
                 }
+                dialog.current.close()
               })
             }}>confirm</button>
           </footer>

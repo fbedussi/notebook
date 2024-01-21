@@ -6,6 +6,7 @@ import {css} from '../custom-elements-utils.js'
 
 import '../delete-button.js'
 
+const htmlUnsafe = str => html([str]);
 customElements.define('note-list', class extends HTMLElement {
   constructor(){
     super()
@@ -40,7 +41,11 @@ customElements.define('note-list', class extends HTMLElement {
           .map((note) => html`
             <article>
               <header style="display: flex; justify-content: end" ><delete-button id=${note.id}/></header>
-              ${note.text.substring(0,200)}
+              
+              <main>
+                ${htmlUnsafe(note.text.substring(0,200))}
+              </main>
+              
               <footer><a is="a-route" href=${`/notes/${note.id}`}>Read more <i class="gg-arrow-right"></i></a></footer>
             </article>
           `)}
