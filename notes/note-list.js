@@ -41,7 +41,7 @@ customElements.define('note-list', class extends HTMLElement {
             <article>
               <header style="display: flex; justify-content: end" ><delete-button id=${note.id}/></header>
               ${note.text.substring(0,200)}
-              <footer><a href=${`/note/?id=${note.id}`}>Read more <i class="gg-arrow-right"></i></a></footer>
+              <footer><a is="a-route" href=${`/notes/${note.id}`}>Read more <i class="gg-arrow-right"></i></a></footer>
             </article>
           `)}
       </div>`

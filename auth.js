@@ -18,6 +18,6 @@ export const authenticate = (email, password) =>{
 
 export const protectedPage = () => {
   if (!getUserId()) {
-    window.location = '/'
+    window.location = window.location.origin
   }
 }

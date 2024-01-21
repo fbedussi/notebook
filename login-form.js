@@ -8,7 +8,7 @@ customElements.define('login-form', class extends HTMLFormElement {
 
   connectedCallback() {
     if (getUserId()) {
-        window.location = './list/'
+        window.location = window.location.origin + '/notes/'
     }
 
     this.addEventListener('submit', e => {
@@ -16,7 +16,7 @@ customElements.define('login-form', class extends HTMLFormElement {
 
       authenticate(e.target[0].value, e.target[1].value)
       .then(() => {
-        window.location = '/list/'
+        window.location = window.location.origin + '/notes/'
       })
       .catch(err => {
         const mapError = {

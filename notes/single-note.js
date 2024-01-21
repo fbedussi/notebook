@@ -20,8 +20,7 @@ customElements.define('single-note', class extends HTMLElement {
   }
 
   connectedCallback() {
-    const searchParams = new URLSearchParams(window.location.search)
-    this.noteId = searchParams.get('id')
+    this.noteId = this.getAttribute('id')
     this.note = signal(null)
     getNote(getUserId(), this.noteId, this.note)
     render(this, this.render)
@@ -31,7 +30,7 @@ customElements.define('single-note', class extends HTMLElement {
     <article>
       ${this.note.value?.text}
       <footer>
-        <div><a href="/list/"><i class="gg-arrow-left"></i> back</a></div>
+        <div><a href="/notes/" is="a-route"><i class="gg-arrow-left"></i> back</a></div>
         <delete-button id=${this.noteId}/> 
       </footer>
     </article>
