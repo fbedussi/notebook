@@ -1,5 +1,6 @@
 import {render, html, signal} from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 import {css} from '../custom-elements-utils.js'
+import {toDoList} from '../state.js'
 
 customElements.define('todo-editor', class extends HTMLElement {
   constructor() {
@@ -35,23 +36,7 @@ customElements.define('todo-editor', class extends HTMLElement {
   }
 
   connectedCallback() {
-    this.todos = signal([
-      {
-      id: crypto.randomUUID(),
-      text: 'A',
-      done: false
-    },
-    {
-      id: crypto.randomUUID(),
-      text: 'B',
-      done: false
-    },
-    {
-      id: crypto.randomUUID(),
-      text: 'C',
-      done: false
-    }
-    ])
+    this.todos = toDoList
     render(this, this.render)
   }
 
@@ -101,9 +86,9 @@ customElements.define('todo-editor', class extends HTMLElement {
         <i class="gg-scroll-v"></i>
         <input type="checkbox" ?checked=${todo.done} onclick=${() => this.toggleDone(todo.id)}/>
         <input type="text" value=${todo.text} onchange=${(ev) => this.setText(todo.id, ev.target.value)}>
-        <button class="outline" onclick=${() => this.delTodo(todo.id)}><i class="gg-trash"></i></button>
+        <button type="button" class="outline" onclick=${() => this.delTodo(todo.id)}><i class="gg-trash"></i></button>
       </li>`)}
-      <button class="outline" onclick=${this.addTodo.bind(this)}><i class="gg-add"></i></button>
+      <button type="button" class="outline" onclick=${this.addTodo.bind(this)}><i class="gg-add"></i></button>
     </ol>
     `
 })

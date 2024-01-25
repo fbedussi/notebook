@@ -42,13 +42,17 @@ customElements.define('note-list', class extends HTMLElement {
   render = () => html`
       <div>
         ${this.notes.value
-          .filter(note => searchTerm.value ? note.text.includes(searchTerm.value) : true)
+          // .filter(note => searchTerm.value ? note.text.includes(searchTerm.value) : true)
           .map((note) => html`
             <article>
               <header style="display: flex; justify-content: end" ><delete-button id=${note.id}/></header>
               
               <main>
-                ${htmlUnsafe(note.text.substring(0,200))}
+                <h1>${note.title}</h1>
+                ${note.type === 'text' ? htmlUnsafe(note.text.substring(0,200)) : html`
+                <ol>
+                  ${note.todos.map(todo => html`<li>${todo.done} ${todo.text}</li>`)}
+                </ol>`}
               </main>
               
               <footer><a is="a-route" href=${`/notes/${note.id}`}><i class="gg-details-more"></i> <i class="gg-arrow-right"></i></a></footer>

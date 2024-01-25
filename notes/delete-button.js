@@ -41,7 +41,7 @@ customElements.define('delete-button', class extends HTMLElement {
                   window.location = '/notes/'
                 }
                 dialog.current.close()
-              })
+              }).catch(err => alert(JSON.stringify(err)))
             }}>confirm</button>
           </footer>
         </article>

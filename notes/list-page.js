@@ -7,6 +7,9 @@ import './todo-editor.js'
 import './rich-editor.js'
 
 import './delete-button.js'
+import {toDoList} from '../state.js'
+import {addNote} from '../backend.js'
+import {getUserId} from '../auth.js'
 
 customElements.define('list-page', class extends HTMLElement {
   constructor() {
@@ -15,12 +18,18 @@ customElements.define('list-page', class extends HTMLElement {
       .tox .tox-promotion-link,
       .tox-statusbar__right-container {
         display: none !important;
-      } 
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
     `
   }
 
   connectedCallback() {
-    this.toDo = signal(true)
+    this.toDo = signal(false)
 
     render(this, this.render)
   }
@@ -41,24 +50,30 @@ customElements.define('list-page', class extends HTMLElement {
       }
     </style>
     
-    <form is="add-note" onsubmit=${ev => {
+    <form onsubmit=${ev => {
       ev.preventDefault()
-      // addNote(getUserId(), editor.value)
-      // editor.value = ''
+
+      const userId = getUserId()
+      
+      const newNote = {
+        type: this.toDo.value ? 'todo' : 'text',
+        title: ev.target[1].value,
+      }
+      if (this.toDo.value) {
+        newNote.todos = toDoList.value.filter(({text}) => text)
+      } else {
+        newNote.text = tinymce.activeEditor.getContent('#editor')
+      }
+      
+      addNote(userId, newNote)
+      
+      ev.target[1].value = ''
+      if (this.toDo.value) {
+        toDoList.value = []
+      } else {
+        tinymce.activeEditor.setContent('')
+      }
     }}>
-
-    <!-- Radios -->
-<fieldset>
-  <label for="small">
-    <input type="radio" id="small" name="size" value="small" checked>
-    <i class="gg-push-down"></i>
-  </label>
-  <label for="medium">
-    <input type="radio" id="medium" name="size" value="medium">
-     <i class="gg-user-list"></i>
-  </label>
-</fieldset>
-
       <label>
         <label>
           <i class="gg-format-text"></i>&nbsp;
@@ -69,6 +84,8 @@ customElements.define('list-page', class extends HTMLElement {
         </label>
           
       </label>
+
+      <input type="text" placeholder="my note" />
       
       ${this.toDo.value ? html`<todo-editor/>` : html`<rich-editor/>`}
       

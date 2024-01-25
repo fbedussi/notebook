@@ -81,7 +81,7 @@ export const getNotes = async (userId, notes) => {
     querySnapshot.forEach((doc) => {
       updatedNotes.push({
         id: doc.id,
-        text: doc.data().text,
+        ...doc.data(),
       });
     });
     notes.value = updatedNotes
@@ -95,7 +95,7 @@ export const getNote = async (userId, id, note) => {
     querySnapshot.forEach((doc) => {
       updatedNotes.push({
         id: doc.id,
-        text: doc.data().text,
+        ...doc.data(),
       });
     });
     note.value = updatedNotes[0]
@@ -104,12 +104,14 @@ export const getNote = async (userId, id, note) => {
 }
 
 export const addNote = async (userId, note) => {
-  const docRef = await addDoc(collection(db, NOTES_COLLECTION_NAME), {
-    userId,
-    text: note,
-  });
+  try {
+    const docRef = await addDoc(collection(db, NOTES_COLLECTION_NAME), {
+      userId,
+      ...note,
+    });
+  } catch(err) {
+    alert(JSON.stringify(err))
+  }
 }
 
-export const deleteNote = async id => {
-  await deleteDoc(doc(db, NOTES_COLLECTION_NAME, id))
-}
+export const deleteNote = id => deleteDoc(doc(db, NOTES_COLLECTION_NAME, id))
