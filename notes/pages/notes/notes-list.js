@@ -1,20 +1,21 @@
 import { render, html, signal } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
-import { searchTerm } from '../state.js'
-import { getNotes } from '../backend.js'
-import { getUserId } from '../auth.js'
-import { css } from '../custom-elements-utils.js'
+import { searchTerm } from '../../state.js'
+import { getNotes } from '../../../backend.js'
+import { getUserId } from '../../../auth.js'
+import { css } from '../../../custom-elements-utils.js'
 
-import './delete-button.js'
+import '../../widgets/delete-button.js'
 
+const EL_NAME = 'notes-list'
 const htmlUnsafe = str => html([str])
 customElements.define(
-  'note-list',
+  EL_NAME,
   class extends HTMLElement {
     constructor() {
       super()
 
       css`
-        note-list article {
+        ${EL_NAME} article {
           header,
           footer {
             padding: 1rem;
@@ -44,7 +45,13 @@ customElements.define(
     render = () =>
       html` <div>
         ${this.notes.value
-          // .filter(note => searchTerm.value ? note.text.includes(searchTerm.value) : true)
+          .filter(note =>
+            searchTerm.value
+              ? (note.text || note.todos.map(({ text }) => text).join(' ')).includes(
+                  searchTerm.value,
+                )
+              : true,
+          )
           .map(
             note => html`
               <article>

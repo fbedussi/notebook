@@ -1,6 +1,6 @@
 import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
-import { css } from '../custom-elements-utils.js'
-import { toDoList } from '../state.js'
+import { css } from '../../../custom-elements-utils.js'
+import { toDoList } from '../../state.js'
 
 const createEmptyTodo = () => {
   return {
