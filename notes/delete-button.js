@@ -1,6 +1,6 @@
 import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
-import { deleteNote } from './backend.js'
-import {css} from './custom-elements-utils.js'
+import { deleteNote } from '../backend.js'
+import {css} from '../custom-elements-utils.js'
 
 customElements.define('delete-button', class extends HTMLElement {
   constructor(){
@@ -49,7 +49,7 @@ customElements.define('delete-button', class extends HTMLElement {
       <button onclick=${() => {
         dialog.current.showModal()
         
-      }}><i class="gg-trash"></i> Delete</button></div>
+      }}><i class="gg-trash"></i></button></div>
     `
   }
 })

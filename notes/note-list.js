@@ -4,7 +4,7 @@ import { getNotes } from '../backend.js'
 import {getUserId} from '../auth.js'
 import {css} from '../custom-elements-utils.js'
 
-import '../delete-button.js'
+import './delete-button.js'
 
 const htmlUnsafe = str => html([str]);
 customElements.define('note-list', class extends HTMLElement {
@@ -13,6 +13,11 @@ customElements.define('note-list', class extends HTMLElement {
 
     css`
       note-list article {
+        header,
+        footer {
+          padding: 1rem;
+        }
+
         footer {
           display: flex;
           justify-content: end;
@@ -46,7 +51,7 @@ customElements.define('note-list', class extends HTMLElement {
                 ${htmlUnsafe(note.text.substring(0,200))}
               </main>
               
-              <footer><a is="a-route" href=${`/notes/${note.id}`}>Read more <i class="gg-arrow-right"></i></a></footer>
+              <footer><a is="a-route" href=${`/notes/${note.id}`}><i class="gg-details-more"></i> <i class="gg-arrow-right"></i></a></footer>
             </article>
           `)}
       </div>`

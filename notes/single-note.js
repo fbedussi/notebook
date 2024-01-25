@@ -3,7 +3,7 @@ import { getNote } from '../backend.js'
 import {getUserId} from '../auth.js'
 import {css} from '../custom-elements-utils.js'
 
-import '../delete-button.js'
+import './delete-button.js'
 
 customElements.define('single-note', class extends HTMLElement {
   constructor(){
@@ -28,9 +28,12 @@ customElements.define('single-note', class extends HTMLElement {
 
   render = () => html`
     <article>
+      <header>
+        <div><a href="/notes/" is="a-route"><i class="gg-arrow-left"></i></a></div>
+      </header>
+
       ${html([this.note.value?.text])}
       <footer>
-        <div><a href="/notes/" is="a-route"><i class="gg-arrow-left"></i> back</a></div>
         <delete-button id=${this.noteId}/> 
       </footer>
     </article>
