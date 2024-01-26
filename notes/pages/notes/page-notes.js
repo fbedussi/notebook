@@ -3,7 +3,7 @@ import { css } from '../../../custom-elements-utils.js'
 
 import './notes-list.js'
 import './search-note.js'
-import './todo-editor.js'
+import '../../widgets/todo-editor.js'
 import './rich-editor.js'
 
 import '../../widgets/delete-button.js'
@@ -95,7 +95,7 @@ customElements.define(
 
         <input type="text" placeholder="my note" />
 
-        ${this.toDo.value ? html`<todo-editor />` : html`<rich-editor />`}
+        ${this.toDo.value ? html`<todo-editor .toDoList=${toDoList} />` : html`<rich-editor />`}
 
         <button type="submit"><i class="gg-push-down"></i></button>
       </form>

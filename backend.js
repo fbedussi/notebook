@@ -16,6 +16,7 @@ import {
   doc,
   addDoc,
   deleteDoc,
+  updateDoc,
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
 
 const firebaseConfig = {
@@ -110,6 +111,15 @@ export const addNote = async (userId, note) => {
       userId,
       ...note,
     })
+  } catch (err) {
+    window.alert(JSON.stringify(err))
+  }
+}
+
+export const updateNote = async note => {
+  try {
+    const docRef = doc(db, NOTES_COLLECTION_NAME, note.id)
+    await updateDoc(docRef, note)
   } catch (err) {
     window.alert(JSON.stringify(err))
   }

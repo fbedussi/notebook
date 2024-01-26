@@ -1,6 +1,5 @@
 import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
-import { css } from '../../../custom-elements-utils.js'
-import { toDoList } from '../../state.js'
+import { css } from '../../custom-elements-utils.js'
 
 const createEmptyTodo = () => {
   return {
@@ -38,31 +37,32 @@ customElements.define(
     }
 
     connectedCallback() {
-      this.todos = toDoList
       render(this, this.render)
     }
 
     toggleDone(id) {
-      this.todos.value = this.todos.value.map(todo =>
+      this.toDoList.value = this.toDoList.value.map(todo =>
         todo.id === id ? { ...todo, done: !todo.done } : todo,
       )
     }
 
     setText(id, text) {
-      this.todos.value = this.todos.value.map(todo => (todo.id === id ? { ...todo, text } : todo))
+      this.toDoList.value = this.toDoList.value.map(todo =>
+        todo.id === id ? { ...todo, text } : todo,
+      )
     }
 
     addTodo() {
-      this.todos.value = this.todos.value.concat(createEmptyTodo())
+      this.toDoList.value = this.toDoList.value.concat(createEmptyTodo())
     }
 
     delTodo(id) {
-      this.todos.value = this.todos.value.filter(todo => todo.id !== id)
+      this.toDoList.value = this.toDoList.value.filter(todo => todo.id !== id)
     }
 
     render = () => html`
       <ol>
-        ${this.todos.value.map(
+        ${this.toDoList.value.map(
           todo =>
             html` <li
               draggable="true"
@@ -80,12 +80,12 @@ customElements.define(
               ondrop=${ev => {
                 ev.preventDefault()
                 const idToMove = ev.dataTransfer.getData('text/plain')
-                const itemToMoveIndex = this.todos.value.findIndex(todo => todo.id === idToMove)
-                const itemToMove = this.todos.value[itemToMoveIndex]
-                const filteredList = this.todos.value.filter(todo => todo.id !== idToMove)
+                const itemToMoveIndex = this.toDoList.value.findIndex(todo => todo.id === idToMove)
+                const itemToMove = this.toDoList.value[itemToMoveIndex]
+                const filteredList = this.toDoList.value.filter(todo => todo.id !== idToMove)
                 const insertIndex = filteredList.findIndex(t => t.id === todo.id)
                 const add = insertIndex >= itemToMoveIndex ? 1 : 0
-                this.todos.value = filteredList
+                this.toDoList.value = filteredList
                   .slice(0, insertIndex + add)
                   .concat(itemToMove)
                   .concat(filteredList.slice(insertIndex + add))
