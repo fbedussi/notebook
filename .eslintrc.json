@@ -48,14 +48,14 @@
     ],
     "no-unreachable": 1,
     // "no-alert": 1,
-    "class-methods-use-this": [
-      2,
-      {
-        "exceptMethods": [
-          "render"
-        ]
-      }
-    ]
+    // "class-methods-use-this": [
+    //   2,
+    //   {
+    //     "exceptMethods": [
+    //       "render"
+    //     ]
+    //   }
+    // ]
   },
   "globals": {
     "tinymce": true,

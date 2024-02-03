@@ -1,18 +1,30 @@
 import { render, html, signal } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 import { css } from '../../../custom-elements-utils.js'
 
-import './notes-list.js'
-import './search-note.js'
-import '../../widgets/todo-editor.js'
-import './rich-editor.js'
+import './components/notes-list.js'
+import './components/search-note.js'
+import '../../widgets/note-editor.js'
 
 import '../../widgets/delete-button.js'
-import { toDoList } from '../../state.js'
 import { addNote } from '../../../backend.js'
-import { getUserId } from '../../../auth.js'
+import { selectedNote } from '../../state.js'
+
+const blankTextNote = {
+  type: 'text',
+  title: '',
+  text: '',
+  todos: [],
+}
+
+const blankTodoNote = {
+  type: 'todo',
+  title: '',
+  text: '',
+  todos: [],
+}
 
 customElements.define(
-  'page-notes',
+  'page-list',
   class extends HTMLElement {
     constructor() {
       super()
@@ -31,8 +43,8 @@ customElements.define(
     }
 
     connectedCallback() {
+      selectedNote.value = blankTextNote
       this.toDo = signal(false)
-
       render(this, this.render)
     }
 
@@ -56,25 +68,12 @@ customElements.define(
         onsubmit=${ev => {
           ev.preventDefault()
 
-          const userId = getUserId()
+          addNote(selectedNote.value)
 
-          const newNote = {
-            type: this.toDo.value ? 'todo' : 'text',
-            title: ev.target[1].value,
-          }
           if (this.toDo.value) {
-            newNote.todos = toDoList.value.filter(({ text }) => text)
+            selectedNote.value = blankTodoNote
           } else {
-            newNote.text = tinymce.activeEditor.getContent('#editor')
-          }
-
-          addNote(userId, newNote)
-
-          ev.target[1].value = ''
-          if (this.toDo.value) {
-            toDoList.value = []
-          } else {
-            tinymce.activeEditor.setContent('')
+            selectedNote.value = blankTextNote
           }
         }}
       >
@@ -87,15 +86,14 @@ customElements.define(
               ?checked=${this.toDo.value}
               onclick=${() => {
                 this.toDo.value = !this.toDo.value
+                selectedNote.value = this.toDo.value ? blankTodoNote : blankTextNote
               }}
             />
             <i class="gg-user-list"></i>
           </label>
         </label>
 
-        <input type="text" placeholder="my note" />
-
-        ${this.toDo.value ? html`<todo-editor .toDoList=${toDoList} />` : html`<rich-editor />`}
+        <note-editor />
 
         <button type="submit"><i class="gg-push-down"></i></button>
       </form>

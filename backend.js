@@ -18,6 +18,7 @@ import {
   deleteDoc,
   updateDoc,
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
+import { getUserId } from './auth'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyB-iin2A3RiV652mi3H1Y0PN-ErlL6HKY0',
@@ -98,6 +99,8 @@ export const getNote = async (userId, id, note) => {
     querySnapshot.forEach(doc => {
       updatedNotes.push({
         id: doc.id,
+        text: '',
+        todos: [],
         ...doc.data(),
       })
     })
@@ -105,23 +108,26 @@ export const getNote = async (userId, id, note) => {
   })
 }
 
-export const addNote = async (userId, note) => {
+export const addNote = async note => {
+  const userId = getUserId()
+
   try {
     await addDoc(collection(db, NOTES_COLLECTION_NAME), {
       userId,
       ...note,
     })
   } catch (err) {
-    window.alert(JSON.stringify(err))
+    console.error(JSON.stringify(err))
   }
 }
 
 export const updateNote = async note => {
   try {
+    console.log('updating note', note.id)
     const docRef = doc(db, NOTES_COLLECTION_NAME, note.id)
     await updateDoc(docRef, note)
   } catch (err) {
-    window.alert(JSON.stringify(err))
+    console.error(JSON.stringify(err))
   }
 }
 

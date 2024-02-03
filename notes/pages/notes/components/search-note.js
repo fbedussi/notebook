@@ -1,4 +1,4 @@
-import { searchTerm } from '../../state.js'
+import { searchTerm } from '../../../state.js'
 
 customElements.define(
   'search-note',
