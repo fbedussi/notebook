@@ -18,6 +18,7 @@
     "vite": "^5.0.8"
   },
   "dependencies": {
-    "a-route": "^1.1.1"
+    "a-route": "^1.1.1",
+    "lodash": "^4.17.21"
   }
 }
