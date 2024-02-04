@@ -30,16 +30,16 @@ customElements.define(
     connectedCallback() {
       this.noteId = this.getAttribute('id')
 
-      let firstRun = true
+      let prevVersion
       effect(() => {
         if (!selectedNote.value) {
           return
         }
 
-        if (!firstRun) {
+        if (prevVersion && selectedNote.value.version > prevVersion) {
           debouncedUpdateNote()
         }
-        firstRun = false
+        prevVersion = selectedNote.value.version
       })
 
       getNote(getUserId(), this.noteId, selectedNote)
