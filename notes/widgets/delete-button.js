@@ -2,14 +2,15 @@ import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 import { deleteNote } from '../../backend.js'
 import { css } from '../../custom-elements-utils.js'
 
+const EL_NAME = 'delete-button'
 customElements.define(
-  'delete-button',
+  EL_NAME,
   class extends HTMLElement {
     constructor() {
       super()
 
       css`
-        delete-button {
+        ${EL_NAME} {
           button {
             display: flex;
             justify-content: space-between;

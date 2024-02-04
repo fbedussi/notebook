@@ -2384,6 +2384,17 @@ a[aria-busy=true] {
   pointer-events: none;
 }
 
+input.underlined {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+}
+
+input.underlined:focus {
+  box-shadow: none;
+}
+
 @keyframes spinner {
   to {
     transform: rotate(360deg);

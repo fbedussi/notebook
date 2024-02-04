@@ -1,13 +1,13 @@
 import { render, html, signal } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 import { css } from '../../../custom-elements-utils.js'
+import { selectedNote, updateSelectedNote } from '../../state.js'
+import { addNote } from '../../../backend.js'
 
 import './components/notes-list.js'
 import './components/search-note.js'
-import '../../widgets/note-editor.js'
-
+import '../../widgets/todo-editor.js'
+import '../../widgets/rich-editor.js'
 import '../../widgets/delete-button.js'
-import { addNote } from '../../../backend.js'
-import { selectedNote } from '../../state.js'
 
 const blankTextNote = {
   type: 'text',
@@ -23,21 +23,24 @@ const blankTodoNote = {
   todos: [],
 }
 
+const EL_NAME = 'page-list'
 customElements.define(
-  'page-list',
+  EL_NAME,
   class extends HTMLElement {
     constructor() {
       super()
       css`
-        .tox .tox-promotion-link,
-        .tox-statusbar__right-container {
-          display: none !important;
-        }
+        ${EL_NAME} {
+          .tox .tox-promotion-link,
+          .tox-statusbar__right-container {
+            display: none !important;
+          }
 
-        form {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
+          form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+          }
         }
       `
     }
@@ -78,22 +81,31 @@ customElements.define(
         }}
       >
         <label>
-          <label>
-            <i class="gg-format-text"></i>&nbsp;
-            <input
-              type="checkbox"
-              role="switch"
-              ?checked=${this.toDo.value}
-              onclick=${() => {
-                this.toDo.value = !this.toDo.value
-                selectedNote.value = this.toDo.value ? blankTodoNote : blankTextNote
-              }}
-            />
-            <i class="gg-user-list"></i>
-          </label>
+          <i class="gg-format-text"></i>&nbsp;
+          <input
+            type="checkbox"
+            role="switch"
+            ?checked=${this.toDo.value}
+            onclick=${() => {
+              this.toDo.value = !this.toDo.value
+              selectedNote.value = this.toDo.value ? blankTodoNote : blankTextNote
+            }}
+          />
+          <i class="gg-user-list"></i>
         </label>
 
-        <note-editor />
+        <input
+          type="text"
+          placeholder="my note"
+          value=${selectedNote.value.title}
+          onchange=${ev => {
+            updateSelectedNote({
+              title: ev.target.value,
+            })
+          }}
+        />
+
+        ${selectedNote.value.type === 'todo' ? html`<todo-editor />` : html`<rich-editor />`}
 
         <button type="submit"><i class="gg-push-down"></i></button>
       </form>

@@ -1,8 +1,9 @@
 import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 import { selectedNote, updateSelectedNote } from '../state'
 
+const EL_NAME = 'rich-editor'
 customElements.define(
-  'rich-editor',
+  EL_NAME,
   class extends HTMLElement {
     constructor() {
       super()

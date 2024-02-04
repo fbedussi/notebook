@@ -10,14 +10,15 @@ const createEmptyTodo = () => {
   }
 }
 
+const EL_NAME = 'todo-editor'
 customElements.define(
-  'todo-editor',
+  EL_NAME,
   class extends HTMLElement {
     constructor() {
       super()
 
       css`
-        todo-editor {
+        ${EL_NAME} {
           ol {
             list-style-type: none;
             padding: 0;
@@ -109,6 +110,7 @@ customElements.define(
                 onclick=${() => this.toggleDone(todo.id)}
               />
               <input
+                class="underlined"
                 type="text"
                 value=${todo.text}
                 oninput=${ev => this.setText(todo.id, ev.target.value)}

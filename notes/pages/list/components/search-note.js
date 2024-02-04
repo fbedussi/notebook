@@ -1,7 +1,8 @@
 import { searchTerm } from '../../../state.js'
 
+const EL_NAME = 'search-note'
 customElements.define(
-  'search-note',
+  EL_NAME,
   class extends HTMLInputElement {
     constructor() {
       super()
