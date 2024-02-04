@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "a-route": "^1.1.1",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "uhtml": "^4.4.7"
   }
 }

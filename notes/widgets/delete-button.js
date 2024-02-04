@@ -1,4 +1,4 @@
-import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
+import { render, html } from 'uhtml/preactive'
 import { deleteNote } from '../../backend.js'
 import { css } from '../../custom-elements-utils.js'
 

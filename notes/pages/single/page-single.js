@@ -1,4 +1,4 @@
-import { render, html, effect } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
+import { render, html, effect } from 'uhtml/preactive'
 import { debounce } from 'lodash'
 import { getNote, updateNote } from '../../../backend.js'
 import { getUserId } from '../../../auth.js'

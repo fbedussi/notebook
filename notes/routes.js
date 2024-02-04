@@ -1,4 +1,4 @@
-import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
+import { render, html } from 'uhtml/preactive'
 import { protectedPage } from '../auth.js'
 import { app } from 'a-route'
 import './pages/list/page-list.js'

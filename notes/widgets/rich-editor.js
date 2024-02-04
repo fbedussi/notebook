@@ -1,4 +1,4 @@
-import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
+import { render, html } from 'uhtml/preactive'
 import { selectedNote, updateSelectedNote } from '../state'
 
 const EL_NAME = 'rich-editor'

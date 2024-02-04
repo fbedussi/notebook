@@ -1,4 +1,4 @@
-import { render, html, signal } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
+import { render, html, signal } from 'uhtml/preactive'
 import { searchTerm } from '../../../state.js'
 import { getNotes } from '../../../../backend.js'
 import { getUserId } from '../../../../auth.js'

@@ -1,4 +1,4 @@
-import { render, html, signal } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
+import { render, html, signal } from 'uhtml/preactive'
 import { css } from '../../../custom-elements-utils.js'
 import { selectedNote, updateSelectedNote } from '../../state.js'
 import { addNote } from '../../../backend.js'
