@@ -3,7 +3,7 @@ import { css } from '../../custom-elements-utils.js'
 
 import './todo-editor.js'
 import './rich-editor.js'
-import { selectedNote } from '../state.js'
+import { selectedNote, updateSelectedNote } from '../state.js'
 
 customElements.define(
   'note-editor',
@@ -24,10 +24,9 @@ customElements.define(
         placeholder="my note"
         value=${selectedNote.value.title}
         onchange=${ev => {
-          selectedNote.value = {
-            ...selectedNote.value,
+          updateSelectedNote({
             title: ev.target.value,
-          }
+          })
         }}
       />
 

@@ -1,5 +1,5 @@
 import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
-import { selectedNote } from '../state'
+import { selectedNote, updateSelectedNote } from '../state'
 
 customElements.define(
   'rich-editor',
@@ -20,10 +20,7 @@ customElements.define(
           editor.setContent(selectedNote.value.text)
           this.editor.on('change', () => {
             const text = this.editor.getContent()
-            selectedNote.value = {
-              ...selectedNote.value,
-              text,
-            }
+            updateSelectedNote({ text })
           })
         },
       })

@@ -101,10 +101,14 @@ export const getNote = async (userId, id, note) => {
         id: doc.id,
         text: '',
         todos: [],
+        version: 1,
         ...doc.data(),
       })
     })
-    note.value = updatedNotes[0]
+    const updatedNote = updatedNotes[0]
+    if (updatedNote.version > (note.value?.version || -1)) {
+      note.value = updatedNote
+    }
   })
 }
 

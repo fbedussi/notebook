@@ -1,6 +1,6 @@
-import { render, html, signal, effect } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
+import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 import { css } from '../../custom-elements-utils.js'
-import { selectedNote } from '../state.js'
+import { selectedNote, updateSelectedNote } from '../state.js'
 
 const createEmptyTodo = () => {
   return {
@@ -46,33 +46,25 @@ customElements.define(
     }
 
     toggleDone(id) {
-      selectedNote.value = {
-        ...selectedNote.value,
+      updateSelectedNote({
         todos: selectedNote.value.todos.map(todo =>
           todo.id === id ? { ...todo, done: !todo.done } : todo,
         ),
-      }
+      })
     }
 
     setText(id, text) {
-      selectedNote.value = {
-        ...selectedNote.value,
+      updateSelectedNote({
         todos: selectedNote.value.todos.map(todo => (todo.id === id ? { ...todo, text } : todo)),
-      }
+      })
     }
 
     addTodo() {
-      selectedNote.value = {
-        ...selectedNote.value,
-        todos: selectedNote.value.todos.concat(createEmptyTodo()),
-      }
+      updateSelectedNote({ todos: selectedNote.value.todos.concat(createEmptyTodo()) })
     }
 
     delTodo(id) {
-      selectedNote.value = {
-        ...selectedNote.value,
-        todos: electedNote.value.todos.filter(todo => todo.id !== id),
-      }
+      updateSelectedNote({ todos: electedNote.value.todos.filter(todo => todo.id !== id) })
     }
 
     render = () => html`
@@ -102,10 +94,12 @@ customElements.define(
                 const filteredList = selectedNote.value.todos.filter(todo => todo.id !== idToMove)
                 const insertIndex = filteredList.findIndex(t => t.id === todo.id)
                 const add = insertIndex >= itemToMoveIndex ? 1 : 0
-                selectedNote.value.todos = filteredList
-                  .slice(0, insertIndex + add)
-                  .concat(itemToMove)
-                  .concat(filteredList.slice(insertIndex + add))
+                updateSelectedNote({
+                  todos: filteredList
+                    .slice(0, insertIndex + add)
+                    .concat(itemToMove)
+                    .concat(filteredList.slice(insertIndex + add)),
+                })
               }}
             >
               <i class="gg-scroll-v"></i>
