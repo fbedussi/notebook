@@ -1,7 +1,7 @@
 import { render, html } from 'https://cdn.jsdelivr.net/npm/uhtml/preactive.js'
 import { protectedPage } from '../auth.js'
 import { app } from 'a-route'
-import './pages/notes/page-list.js'
+import './pages/list/page-list.js'
 import './pages/single/page-single.js'
 
 protectedPage()
