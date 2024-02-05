@@ -88,7 +88,8 @@ export const getNotes = async (userId, notes) => {
   })
 }
 
-export const getNote = async (userId, id, note) => {
+export const getNote = async (id, note, forceUpdate) => {
+  const userId = getUserId()
   const q = query(
     collection(db, NOTES_COLLECTION_NAME),
     where('__name__', '==', id),
@@ -106,7 +107,8 @@ export const getNote = async (userId, id, note) => {
       })
     })
     const updatedNote = updatedNotes[0]
-    if (updatedNote.version > (note.value?.version || -1)) {
+    const newData = updatedNote && updatedNote.version > (note.value?.version || -1)
+    if (forceUpdate || newData) {
       note.value = updatedNote
     }
   })
@@ -116,10 +118,11 @@ export const addNote = async note => {
   const userId = getUserId()
 
   try {
-    await addDoc(collection(db, NOTES_COLLECTION_NAME), {
+    const docRef = await addDoc(collection(db, NOTES_COLLECTION_NAME), {
       userId,
       ...note,
     })
+    return docRef.id
   } catch (err) {
     console.error(JSON.stringify(err))
   }

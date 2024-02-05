@@ -1,7 +1,6 @@
 import { render, html, effect } from 'uhtml/preactive'
 import { debounce } from 'lodash'
-import { getNote, updateNote } from '../../../backend.js'
-import { getUserId } from '../../../auth.js'
+import { addNote, getNote, updateNote } from '../../../backend.js'
 import { css } from '../../../custom-elements-utils.js'
 
 import '../../widgets/delete-button.js'
@@ -35,6 +34,7 @@ customElements.define(
           footer {
             display: flex;
             justify-content: space-between;
+            gap: 1rem;
           }
         }
       `
@@ -55,7 +55,7 @@ customElements.define(
         prevVersion = selectedNote.value.version
       })
 
-      getNote(getUserId(), this.noteId, selectedNote)
+      getNote(this.noteId, selectedNote)
 
       render(this, this.render)
     }
@@ -88,11 +88,28 @@ customElements.define(
             <footer>
               <button
                 onclick=${() => {
+                  addNote({
+                    type: selectedNote.value.type,
+                    title: selectedNote.value.title + ' (copy)',
+                    text: selectedNote.value.text,
+                    todos: selectedNote.value.todos,
+                    version: 1,
+                  }).then(noteId => {
+                    history.replaceState(undefined, undefined, `/notes/${noteId}`)
+                    getNote(noteId, selectedNote, true)
+                  })
+                }}
+              >
+                <i class="gg-copy"></i>
+              </button>
+
+              <button
+                onclick=${() => {
                   const text = `# ${selectedNote.value.title.trim()}\n${convertNoteContent(selectedNote.value)}`
                   navigator.clipboard.writeText(text)
                 }}
               >
-                <i class="gg-copy"></i>
+                <i class="gg-clipboard"></i>
               </button>
             </footer>
           </article>
