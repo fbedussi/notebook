@@ -10,6 +10,6 @@ export const updateSelectedNote = update => {
   selectedNote.value = {
     ...selectedNote.value,
     ...update,
-    version: (selectedNote.version || 1) + 1,
+    version: (selectedNote.value.version || 1) + 1,
   }
 }
