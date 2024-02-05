@@ -1,6 +1,6 @@
 import { render, html, signal } from 'uhtml/preactive'
 import { searchTerm } from '../../../state.js'
-import { getNotes } from '../../../../backend.js'
+import { getNotes, updateNote } from '../../../../backend.js'
 import { getUserId } from '../../../../auth.js'
 import { css } from '../../../../custom-elements-utils.js'
 
@@ -68,9 +68,18 @@ customElements.define(
                         ${note.todos.map(
                           todo =>
                             html`<li>
-                              ${todo.done
-                                ? html`<i class="gg-radio-checked"></i>`
-                                : html`<i class="gg-radio-check"></i>`}
+                              <input
+                                type="checkbox"
+                                ?checked=${todo.done}
+                                onclick=${() => {
+                                  updateNote({
+                                    ...note,
+                                    todos: note.todos.map(t =>
+                                      t.id === todo.id ? { ...t, done: !t.done } : t,
+                                    ),
+                                  })
+                                }}
+                              />
                               <span class=${todo.done ? 'todo-done' : ''}>${todo.text}</span>
                             </li>`,
                         )}
