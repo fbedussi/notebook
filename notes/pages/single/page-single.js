@@ -10,6 +10,13 @@ import { selectedNote, updateSelectedNote } from '../../state.js'
 
 const debouncedUpdateNote = debounce(() => updateNote(selectedNote.value), 1000)
 
+const convertNoteContent = note =>
+  note.type === 'text'
+    ? note.text
+    : note.todos
+        .map(({ done, text }, index) => `${index}- ${done ? '(X)' : '( )'} ${text.trim()}`)
+        .join('\n')
+
 const EL_NAME = 'page-single'
 customElements.define(
   EL_NAME,
@@ -78,7 +85,16 @@ customElements.define(
               ${selectedNote.value.type === 'todo' ? html`<todo-editor />` : html`<rich-editor />`}
             </main>
 
-            <footer></footer>
+            <footer>
+              <button
+                onclick=${() => {
+                  const text = `# ${selectedNote.value.title.trim()}\n${convertNoteContent(selectedNote.value)}`
+                  navigator.clipboard.writeText(text)
+                }}
+              >
+                <i class="gg-copy"></i>
+              </button>
+            </footer>
           </article>
         `
       )
