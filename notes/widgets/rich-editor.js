@@ -1,4 +1,4 @@
-import { render, html } from 'uhtml/preactive'
+import { render, html, effect } from 'uhtml/preactive'
 import { selectedNote, updateSelectedNote } from '../state'
 
 const EL_NAME = 'rich-editor'
@@ -24,6 +24,12 @@ customElements.define(
             updateSelectedNote({ text })
           })
         },
+      })
+
+      effect(() => {
+        if (selectedNote.value && this.editor) {
+          this.editor.setContent(selectedNote.value.text)
+        }
       })
     }
 
