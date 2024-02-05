@@ -9,9 +9,16 @@ import { selectedNote, updateSelectedNote } from '../../state.js'
 
 const debouncedUpdateNote = debounce(() => updateNote(selectedNote.value), 1000)
 
+const convertHtmlToText = html => {
+  const el = document.createElement('div')
+  el.innerHTML = html
+  const text = el.innerText
+  return text
+}
+
 const convertNoteContent = note =>
   note.type === 'text'
-    ? note.text
+    ? convertHtmlToText(note.text)
     : note.todos
         .map(({ done, text }, index) => `${index}- ${done ? '(X)' : '( )'} ${text.trim()}`)
         .join('\n')
