@@ -14,3 +14,7 @@ i {
 i.gg-trash {
   vertical-align: initial;
 }
+
+.todo-done {
+  text-decoration: line-through;
+}

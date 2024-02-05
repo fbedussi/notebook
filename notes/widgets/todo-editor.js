@@ -110,7 +110,7 @@ customElements.define(
                 onclick=${() => this.toggleDone(todo.id)}
               />
               <input
-                class="underlined"
+                class=${['underlined', todo.done ? 'todo-done' : ''].join(' ')}
                 type="text"
                 value=${todo.text}
                 oninput=${ev => this.setText(todo.id, ev.target.value)}

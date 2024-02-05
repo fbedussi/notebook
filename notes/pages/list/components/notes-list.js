@@ -70,7 +70,7 @@ customElements.define(
                               ${todo.done
                                 ? html`<i class="gg-radio-checked"></i>`
                                 : html`<i class="gg-radio-check"></i>`}
-                              ${todo.text}
+                              <span class=${todo.done ? 'todo-done' : ''}>${todo.text}</span>
                             </li>`,
                         )}
                       </ol>`}
