@@ -18,3 +18,8 @@ i.gg-trash {
 .todo-done {
   text-decoration: line-through;
 }
+
+button.icon {
+  display: flex;
+  width: min-content;
+}

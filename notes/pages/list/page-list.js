@@ -31,6 +31,10 @@ customElements.define(
       super()
       css`
         ${EL_NAME} {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+
           .tox .tox-promotion-link,
           .tox-statusbar__right-container {
             display: none !important;
@@ -41,11 +45,18 @@ customElements.define(
             flex-direction: column;
             gap: 1rem;
           }
+
+          .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
         }
       `
     }
 
     connectedCallback() {
+      this.showAddNoteForm = signal(false)
       selectedNote.value = blankTextNote
       this.toDo = signal(false)
       render(this, this.render)
@@ -67,7 +78,16 @@ customElements.define(
         }
       </style>
 
+      <button
+        ?hidden=${this.showAddNoteForm.value}
+        type="button"
+        onclick=${() => (this.showAddNoteForm.value = !this.showAddNoteForm.value)}
+      >
+        <i class="gg-add"></i>
+      </button>
+
       <form
+        ?hidden=${!this.showAddNoteForm.value}
         onsubmit=${ev => {
           ev.preventDefault()
 
@@ -80,19 +100,29 @@ customElements.define(
           }
         }}
       >
-        <label>
-          <i class="gg-format-text"></i>&nbsp;
-          <input
-            type="checkbox"
-            role="switch"
-            ?checked=${this.toDo.value}
-            onclick=${() => {
-              this.toDo.value = !this.toDo.value
-              selectedNote.value = this.toDo.value ? blankTodoNote : blankTextNote
-            }}
-          />
-          <i class="gg-user-list"></i>
-        </label>
+        <div class="header">
+          <label>
+            <i class="gg-format-text"></i>&nbsp;
+            <input
+              type="checkbox"
+              role="switch"
+              ?checked=${this.toDo.value}
+              onclick=${() => {
+                this.toDo.value = !this.toDo.value
+                selectedNote.value = this.toDo.value ? blankTodoNote : blankTextNote
+              }}
+            />
+            <i class="gg-user-list"></i>
+          </label>
+
+          <button
+            class="icon outline"
+            type="button"
+            onclick=${() => (this.showAddNoteForm.value = !this.showAddNoteForm.value)}
+          >
+            <i class="gg-chevron-up"></i>
+          </button>
+        </div>
 
         <input
           type="text"
