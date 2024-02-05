@@ -52,6 +52,7 @@ customElements.define(
                 )
               : true,
           )
+          .sort((n1, n2) => (n2.updatedAt || 0) - (n1.updatedAt || 0))
           .map(
             note => html`
               <article>

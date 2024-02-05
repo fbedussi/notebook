@@ -117,9 +117,13 @@ export const getNote = async (id, note, forceUpdate) => {
 export const addNote = async note => {
   const userId = getUserId()
 
+  const timestamp = new Date().getTime()
+
   try {
     const docRef = await addDoc(collection(db, NOTES_COLLECTION_NAME), {
       userId,
+      createdAt: timestamp,
+      updatedAt: timestamp,
       ...note,
     })
     return docRef.id
@@ -129,10 +133,15 @@ export const addNote = async note => {
 }
 
 export const updateNote = async note => {
+  const timestamp = new Date().getTime()
+
   try {
     console.log('updating note', note.id)
     const docRef = doc(db, NOTES_COLLECTION_NAME, note.id)
-    await updateDoc(docRef, note)
+    await updateDoc(docRef, {
+      ...note,
+      updatedAt: timestamp,
+    })
   } catch (err) {
     console.error(JSON.stringify(err))
   }
