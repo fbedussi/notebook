@@ -65,7 +65,7 @@ customElements.define(
     }
 
     delTodo(id) {
-      updateSelectedNote({ todos: electedNote.value.todos.filter(todo => todo.id !== id) })
+      updateSelectedNote({ todos: selectedNote.value.todos.filter(todo => todo.id !== id) })
     }
 
     render = () => html`
