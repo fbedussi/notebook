@@ -136,7 +136,7 @@ customElements.define(
         <input
           type="text"
           placeholder="my note"
-          value=${selectedNote.value.title}
+          value=${selectedNote.value?.title}
           onchange=${ev => {
             updateSelectedNote({
               title: ev.target.value,
@@ -144,7 +144,8 @@ customElements.define(
           }}
         />
 
-        ${selectedNote.value.type === 'todo' ? html`<todo-editor />` : html`<rich-editor />`}
+        ${selectedNote.value?.type === 'todo' ? html`<todo-editor />` : undefined}
+        ${selectedNote.value?.type === 'text' ? html`<rich-editor />` : undefined}
 
         <button type="submit"><i class="gg-push-down"></i></button>
       </form>

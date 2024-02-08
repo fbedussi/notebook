@@ -48,6 +48,8 @@ customElements.define(
     }
 
     connectedCallback() {
+      selectedNote.value = null
+
       this.noteId = this.getAttribute('id')
 
       let prevVersion
@@ -68,60 +70,58 @@ customElements.define(
     }
 
     render = () => {
-      return (
-        selectedNote.value &&
-        html`
-          <article>
-            <header>
-              <a href="/notes/" is="a-route"><i class="gg-arrow-left"></i></a>
-              <input
-                class="underlined"
-                type="text"
-                placeholder="my note"
-                value=${selectedNote.value.title}
-                onchange=${ev => {
-                  updateSelectedNote({
-                    title: ev.target.value,
-                  })
-                }}
-              />
-              <delete-button id=${this.noteId} />
-            </header>
+      return html`
+        <article>
+          <header>
+            <a href="/notes/" is="a-route"><i class="gg-arrow-left"></i></a>
+            <input
+              class="underlined"
+              type="text"
+              placeholder="my note"
+              value=${selectedNote.value?.title}
+              onchange=${ev => {
+                updateSelectedNote({
+                  title: ev.target.value,
+                })
+              }}
+            />
+            <delete-button id=${this.noteId} />
+          </header>
 
-            <main>
-              ${selectedNote.value.type === 'todo' ? html`<todo-editor />` : html`<rich-editor />`}
-            </main>
+          <main>
+            ${selectedNote.value?.type === 'todo' ? html`<todo-editor />` : null}
+            ${selectedNote.value?.type === 'text' ? html`<rich-editor />` : null}
+          </main>
 
-            <footer>
-              <button
-                onclick=${() => {
-                  addNote({
-                    type: selectedNote.value.type,
-                    title: selectedNote.value.title + ' (copy)',
-                    text: selectedNote.value.text,
-                    todos: selectedNote.value.todos,
-                    version: 1,
-                  }).then(noteId => {
-                    history.replaceState(undefined, undefined, `/notes/${noteId}`)
-                    getNote(noteId, selectedNote, true)
-                  })
-                }}
-              >
-                <i class="gg-copy"></i>
-              </button>
+          <footer>
+            <button
+              onclick=${() => {
+                addNote({
+                  type: selectedNote.value.type,
+                  title: selectedNote.value.title + ' (copy)',
+                  text: selectedNote.value.text,
+                  todos: selectedNote.value.todos,
+                  version: 1,
+                }).then(noteId => {
+                  history.replaceState(undefined, undefined, `/notes/${noteId}`)
+                  getNote(noteId, selectedNote, true)
+                })
+              }}
+            >
+              <i class="gg-copy"></i>
+            </button>
 
-              <button
-                onclick=${() => {
-                  const text = `# ${selectedNote.value.title.trim()}\n${convertNoteContent(selectedNote.value)}`
-                  navigator.clipboard.writeText(text)
-                }}
-              >
-                <i class="gg-clipboard"></i>
-              </button>
-            </footer>
-          </article>
-        `
-      )
+            <button
+              onclick=${() => {
+                const text = `# ${selectedNote.value.title.trim()}\n${convertNoteContent(selectedNote.value)}`
+                navigator.clipboard.writeText(text)
+              }}
+            >
+              <i class="gg-clipboard"></i>
+            </button>
+          </footer>
+        </article>
+      `
     }
   },
 )
