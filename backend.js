@@ -74,12 +74,20 @@ export const logoutBe = async () => {
 
 const NOTES_COLLECTION_NAME = 'notes'
 
+const baseNote = {
+  text: '',
+  todos: [],
+  version: 1,
+  archived: false,
+}
+
 export const getNotes = async (userId, notes) => {
   const q = query(collection(db, NOTES_COLLECTION_NAME), where('userId', '==', userId))
   onSnapshot(q, querySnapshot => {
     const updatedNotes = []
     querySnapshot.forEach(doc => {
       updatedNotes.push({
+        ...baseNote,
         id: doc.id,
         ...doc.data(),
       })
@@ -99,10 +107,8 @@ export const getNote = async (id, note, forceUpdate) => {
     const updatedNotes = []
     querySnapshot.forEach(doc => {
       updatedNotes.push({
+        ...baseNote,
         id: doc.id,
-        text: '',
-        todos: [],
-        version: 1,
         ...doc.data(),
       })
     })

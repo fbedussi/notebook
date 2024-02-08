@@ -21,6 +21,12 @@ customElements.define(
             padding: 1rem;
           }
 
+          .note-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+          }
+
           footer {
             display: flex;
             justify-content: end;
@@ -45,20 +51,38 @@ customElements.define(
     render = () =>
       html` <div>
         ${this.notes.value
-          .filter(note =>
-            searchTerm.value
+          .filter(note => {
+            const termMatch = searchTerm.value
               ? (note.text || note.todos.map(({ text }) => text).join(' ')).includes(
                   searchTerm.value,
                 )
-              : true,
-          )
+              : true
+            const archivedMatch = this.showArchived.value ? true : !note.archived
+
+            return termMatch && archivedMatch
+          })
           .sort((n1, n2) => (n2.updatedAt || 0) - (n1.updatedAt || 0))
           .map(
             note => html`
               <article>
                 <header style="display: flex; justify-content: space-between">
                   <h1>${note.title}</h1>
-                  <delete-button id=${note.id} />
+                  <div class="note-actions">
+                    <label>
+                      <input
+                        type="checkbox"
+                        ?checked=${note.archived}
+                        onclick=${ev => {
+                          updateNote({
+                            ...note,
+                            archived: ev.target.checked,
+                          })
+                        }}
+                      />
+                      Archived
+                    </label>
+                    <delete-button id=${note.id} />
+                  </div>
                 </header>
 
                 <main>

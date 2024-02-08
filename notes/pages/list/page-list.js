@@ -46,6 +46,13 @@ customElements.define(
             gap: 1rem;
           }
 
+          .action-bar {
+            display: grid;
+            grid-template-columns: auto max-content;
+            gap: 1rem;
+            align-items: center;
+          }
+
           .header {
             display: flex;
             justify-content: space-between;
@@ -57,6 +64,8 @@ customElements.define(
 
     connectedCallback() {
       this.showAddNoteForm = signal(false)
+      this.showArchived = signal(false)
+
       selectedNote.value = blankTextNote
       this.toDo = signal(false)
       render(this, this.render)
@@ -140,9 +149,21 @@ customElements.define(
         <button type="submit"><i class="gg-push-down"></i></button>
       </form>
 
-      <input type="search" is="search-note" />
+      <div class="action-bar">
+        <input type="search" is="search-note" />
+        <label>
+          <input
+            type="checkbox"
+            ?checked=${this.showArchived.value}
+            onclick=${ev => {
+              this.showArchived.value = ev.target.checked
+            }}
+          />
+          Show archived
+        </label>
+      </div>
 
-      <notes-list />
+      <notes-list .showArchived=${this.showArchived} />
     `
   },
 )
