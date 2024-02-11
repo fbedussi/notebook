@@ -18,7 +18,7 @@ customElements.define(
         selector: '#editor',
         init_instance_callback: editor => {
           this.editor = editor
-          editor.setContent(selectedNote.value.text)
+          editor.setContent(selectedNote.value?.text || '')
           this.editor.on('change', () => {
             const text = this.editor.getContent()
             updateSelectedNote({ text })

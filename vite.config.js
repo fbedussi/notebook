@@ -13,7 +13,8 @@ export default defineConfig({
             !req.url.includes('.js') &&
             !req.url.includes('.css')
           ) {
-            req.url = '/notes/'
+            const qs = req.url.split('?')[1]
+            req.url = '/notes/' + (qs ? `?${qs}` : '')
           }
           next()
         })

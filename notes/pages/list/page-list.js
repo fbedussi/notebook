@@ -1,5 +1,5 @@
 import { render, html, signal } from 'uhtml/preactive'
-import { css } from '../../../custom-elements-utils.js'
+import { css, searchParams, setSearchParams } from '../../../custom-elements-utils.js'
 import { selectedNote, updateSelectedNote } from '../../state.js'
 import { addNote } from '../../../backend.js'
 
@@ -64,7 +64,6 @@ customElements.define(
 
     connectedCallback() {
       this.showAddNoteForm = signal(false)
-      this.showArchived = signal(false)
 
       selectedNote.value = blankTextNote
       this.toDo = signal(false)
@@ -72,6 +71,7 @@ customElements.define(
     }
 
     render = () => html`
+      ${(console.log('rendering page list'), null)}
       <style>
         @scope {
           display: flex;
@@ -155,16 +155,16 @@ customElements.define(
         <label>
           <input
             type="checkbox"
-            ?checked=${this.showArchived.value}
+            ?checked=${searchParams.value.get('showArchived') === 'true'}
             onclick=${ev => {
-              this.showArchived.value = ev.target.checked
+              setSearchParams({ showArchived: ev.target.checked })
             }}
           />
           Show archived
         </label>
       </div>
 
-      <notes-list .showArchived=${this.showArchived} />
+      <notes-list />
     `
   },
 )

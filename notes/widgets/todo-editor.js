@@ -70,7 +70,7 @@ customElements.define(
 
     render = () => html`
       <ol>
-        ${selectedNote.value.todos?.map(
+        ${selectedNote.value?.todos.map(
           todo =>
             html` <li
               draggable="true"

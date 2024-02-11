@@ -2,7 +2,7 @@ import { render, html, signal } from 'uhtml/preactive'
 import { searchTerm } from '../../../state.js'
 import { getNotes, updateNote } from '../../../../backend.js'
 import { getUserId } from '../../../../auth.js'
-import { css } from '../../../../custom-elements-utils.js'
+import { css, searchParams } from '../../../../custom-elements-utils.js'
 
 import '../../../widgets/delete-button.js'
 
@@ -49,7 +49,7 @@ customElements.define(
     }
 
     render = () =>
-      html` <div>
+      html`<div>
         ${this.notes.value
           .filter(note => {
             const termMatch = searchTerm.value
@@ -57,7 +57,8 @@ customElements.define(
                   searchTerm.value,
                 )
               : true
-            const archivedMatch = this.showArchived.value ? true : !note.archived
+            const archivedMatch =
+              searchParams.value.get('showArchived') === 'true' ? true : !note.archived
 
             return termMatch && archivedMatch
           })
