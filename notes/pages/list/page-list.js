@@ -1,6 +1,6 @@
 import { render, html, signal } from 'uhtml/preactive'
 import { css, searchParams, setSearchParams } from '../../../custom-elements-utils.js'
-import { selectedNote, updateSelectedNote } from '../../state.js'
+import { updateSelectedNote } from '../../helpers.js'
 import { addNote } from '../../../backend.js'
 
 import './components/notes-list.js'
@@ -65,13 +65,12 @@ customElements.define(
     connectedCallback() {
       this.showAddNoteForm = signal(false)
 
-      selectedNote.value = blankTextNote
+      this.selectedNote = signal(blankTextNote)
       this.toDo = signal(false)
       render(this, this.render)
     }
 
     render = () => html`
-      ${(console.log('rendering page list'), null)}
       <style>
         @scope {
           display: flex;
@@ -100,12 +99,12 @@ customElements.define(
         onsubmit=${ev => {
           ev.preventDefault()
 
-          addNote(selectedNote.value)
+          addNote(this.selectedNote.value)
 
           if (this.toDo.value) {
-            selectedNote.value = blankTodoNote
+            this.selectedNote.value = blankTodoNote
           } else {
-            selectedNote.value = blankTextNote
+            this.selectedNote.value = blankTextNote
           }
         }}
       >
@@ -118,7 +117,7 @@ customElements.define(
               ?checked=${this.toDo.value}
               onclick=${() => {
                 this.toDo.value = !this.toDo.value
-                selectedNote.value = this.toDo.value ? blankTodoNote : blankTextNote
+                this.selectedNote.value = this.toDo.value ? blankTodoNote : blankTextNote
               }}
             />
             <i class="gg-user-list"></i>
@@ -136,16 +135,20 @@ customElements.define(
         <input
           type="text"
           placeholder="my note"
-          value=${selectedNote.value?.title}
+          value=${this.selectedNote.value?.title}
           onchange=${ev => {
-            updateSelectedNote({
+            updateSelectedNote(this.selectedNote, {
               title: ev.target.value,
             })
           }}
         />
 
-        ${selectedNote.value?.type === 'todo' ? html`<todo-editor />` : undefined}
-        ${selectedNote.value?.type === 'text' ? html`<rich-editor />` : undefined}
+        ${this.selectedNote.value?.type === 'todo'
+          ? html`<todo-editor .selectedNote=${this.selectedNote} />`
+          : undefined}
+        ${this.selectedNote.value?.type === 'text'
+          ? html`<rich-editor .selectedNote=${this.selectedNote} />`
+          : undefined}
 
         <button type="submit"><i class="gg-push-down"></i></button>
       </form>

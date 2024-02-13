@@ -1,6 +1,6 @@
 import { render, html } from 'uhtml/preactive'
 import { css } from '../../custom-elements-utils.js'
-import { selectedNote, updateSelectedNote } from '../state.js'
+import { updateSelectedNote } from '../helpers.js'
 
 const createEmptyTodo = () => {
   return {
@@ -39,7 +39,7 @@ customElements.define(
     }
 
     connectedCallback() {
-      if (selectedNote.value.type !== 'todo') {
+      if (this.selectedNote.value.type !== 'todo') {
         throw new Error('todo-editor must be used with todo type notes')
       }
 
@@ -47,30 +47,36 @@ customElements.define(
     }
 
     toggleDone(id) {
-      updateSelectedNote({
-        todos: selectedNote.value.todos.map(todo =>
+      updateSelectedNote(this.selectedNote, {
+        todos: this.selectedNote.value.todos.map(todo =>
           todo.id === id ? { ...todo, done: !todo.done } : todo,
         ),
       })
     }
 
     setText(id, text) {
-      updateSelectedNote({
-        todos: selectedNote.value.todos.map(todo => (todo.id === id ? { ...todo, text } : todo)),
+      updateSelectedNote(this.selectedNote, {
+        todos: this.selectedNote.value.todos.map(todo =>
+          todo.id === id ? { ...todo, text } : todo,
+        ),
       })
     }
 
     addTodo() {
-      updateSelectedNote({ todos: selectedNote.value.todos.concat(createEmptyTodo()) })
+      updateSelectedNote(this.selectedNote, {
+        todos: this.selectedNote.value.todos.concat(createEmptyTodo()),
+      })
     }
 
     delTodo(id) {
-      updateSelectedNote({ todos: selectedNote.value.todos.filter(todo => todo.id !== id) })
+      updateSelectedNote(this.selectedNote, {
+        todos: this.selectedNote.value.todos.filter(todo => todo.id !== id),
+      })
     }
 
     render = () => html`
       <ol>
-        ${selectedNote.value?.todos.map(
+        ${this.selectedNote.value?.todos.map(
           todo =>
             html` <li
               draggable="true"
@@ -88,11 +94,13 @@ customElements.define(
               ondrop=${ev => {
                 ev.preventDefault()
                 const idToMove = ev.dataTransfer.getData('text/plain')
-                const itemToMoveIndex = selectedNote.value.todos.findIndex(
+                const itemToMoveIndex = this.selectedNote.value.todos.findIndex(
                   todo => todo.id === idToMove,
                 )
-                const itemToMove = selectedNote.value.todos[itemToMoveIndex]
-                const filteredList = selectedNote.value.todos.filter(todo => todo.id !== idToMove)
+                const itemToMove = this.selectedNote.value.todos[itemToMoveIndex]
+                const filteredList = this.selectedNote.value.todos.filter(
+                  todo => todo.id !== idToMove,
+                )
                 const insertIndex = filteredList.findIndex(t => t.id === todo.id)
                 const add = insertIndex >= itemToMoveIndex ? 1 : 0
                 updateSelectedNote({
