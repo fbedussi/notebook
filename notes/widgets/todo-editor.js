@@ -103,7 +103,7 @@ customElements.define(
                 )
                 const insertIndex = filteredList.findIndex(t => t.id === todo.id)
                 const add = insertIndex >= itemToMoveIndex ? 1 : 0
-                updateSelectedNote({
+                updateSelectedNote(this.selectedNote, {
                   todos: filteredList
                     .slice(0, insertIndex + add)
                     .concat(itemToMove)
