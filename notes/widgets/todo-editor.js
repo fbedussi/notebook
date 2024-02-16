@@ -128,7 +128,7 @@ customElements.define(
               </button>
             </li>`,
         )}
-        <button type="button" class="outline" onclick=${this.addTodo}>
+        <button type="button" class="outline" onclick=${() => this.addTodo()}>
           <i class="gg-add"></i>
         </button>
       </ol>
