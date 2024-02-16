@@ -73,7 +73,7 @@ customElements.define(
       <article>
         <header>
           <a
-            href=${history.state !== window.location.href
+            href=${history.state !== window.location.href && history.state  
               ? history.state.substring(window.location.origin.length)
               : '/notes/'}
             is="a-route"
