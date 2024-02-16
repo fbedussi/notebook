@@ -19,6 +19,10 @@ customElements.define(
 
       css`
         ${EL_NAME} {
+          button {
+            margin-bottom: 1rem;
+          }
+
           ol {
             list-style-type: none;
             padding: 0;
@@ -74,7 +78,17 @@ customElements.define(
       })
     }
 
+    delDone() {
+      updateSelectedNote(this.selectedNote, {
+        todos: this.selectedNote.value.todos.filter(todo => !todo.done),
+      })
+    }
+
     render = () => html`
+      <button class="outline" onclick=${() => this.delDone()}>
+        <i class="gg-trash"></i>
+        Delete all done
+      </button>
       <ol>
         ${this.selectedNote.value?.todos.map(
           todo =>
