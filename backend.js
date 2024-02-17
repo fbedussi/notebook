@@ -79,6 +79,7 @@ const baseNote = {
   todos: [],
   version: 1,
   archived: false,
+  createdAt: 0,
 }
 
 export const getNotes = async (userId, notes) => {

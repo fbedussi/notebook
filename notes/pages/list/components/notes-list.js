@@ -123,7 +123,7 @@ customElements.define(
 
             return termMatch && archivedMatch
           })
-          .sort((n1, n2) => (n2.updatedAt || 0) - (n1.updatedAt || 0))
+          .sort((n1, n2) => (n2.createdAt || 0) - (n1.createdAt || 0))
           .map(note => Note(note, note.id))}
       </div>`
   },
