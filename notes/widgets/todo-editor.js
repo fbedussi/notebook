@@ -1,4 +1,5 @@
 import { render, html } from 'uhtml/preactive'
+import { htmlFor } from 'uhtml/keyed'
 import { css } from '../../custom-elements-utils.js'
 import { updateSelectedNote } from '../helpers.js'
 
@@ -90,9 +91,14 @@ customElements.define(
         Delete all done
       </button>
       <ol>
-        ${this.selectedNote.value?.todos.map(
-          todo =>
-            html` <li
+        ${this.selectedNote.value?.todos.map(todo => this.renderTodo(todo, todo.id))}
+        <button type="button" class="outline" onclick=${() => this.addTodo()}>
+          <i class="gg-add"></i>
+        </button>
+      </ol>
+    `
+
+    renderTodo = (todo, key) => htmlFor(this.renderTodo, key)`<li
               draggable="true"
               ondragstart=${ev => {
                 ev.dataTransfer.setData('text/plain', todo.id)
@@ -140,12 +146,6 @@ customElements.define(
               <button type="button" class="outline" onclick=${() => this.delTodo(todo.id)}>
                 <i class="gg-trash"></i>
               </button>
-            </li>`,
-        )}
-        <button type="button" class="outline" onclick=${() => this.addTodo()}>
-          <i class="gg-add"></i>
-        </button>
-      </ol>
-    `
+            </li>`
   },
 )

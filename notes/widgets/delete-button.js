@@ -1,6 +1,5 @@
 import { render, html } from 'uhtml/preactive'
 import { deleteNote } from '../../backend.js'
-import { css } from '../../custom-elements-utils.js'
 
 const EL_NAME = 'delete-button'
 customElements.define(
@@ -8,17 +7,6 @@ customElements.define(
   class extends HTMLElement {
     constructor() {
       super()
-
-      css`
-        ${EL_NAME} {
-          button {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1em;
-          }
-        }
-      `
     }
 
     connectedCallback() {
