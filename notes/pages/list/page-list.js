@@ -8,6 +8,7 @@ import './components/search-note.js'
 import '../../widgets/todo-editor.js'
 import '../../widgets/rich-editor.js'
 import '../../widgets/delete-button.js'
+import '../../widgets/reveal-panel.js'
 
 const blankTextNote = {
   type: 'text',
@@ -94,64 +95,65 @@ customElements.define(
         <i class="gg-add"></i>
       </button>
 
-      <form
-        ?hidden=${!this.showAddNoteForm.value}
-        onsubmit=${ev => {
-          ev.preventDefault()
+      <reveal-panel transition="300" ?open=${this.showAddNoteForm.value}>
+        <form
+          onsubmit=${ev => {
+            ev.preventDefault()
 
-          addNote(this.selectedNote.value)
+            addNote(this.selectedNote.value)
 
-          if (this.toDo.value) {
-            this.selectedNote.value = blankTodoNote
-          } else {
-            this.selectedNote.value = blankTextNote
-          }
-        }}
-      >
-        <div class="header">
-          <label>
-            <i class="gg-format-text"></i>&nbsp;
-            <input
-              type="checkbox"
-              role="switch"
-              ?checked=${this.toDo.value}
-              onclick=${() => {
-                this.toDo.value = !this.toDo.value
-                this.selectedNote.value = this.toDo.value ? blankTodoNote : blankTextNote
-              }}
-            />
-            <i class="gg-user-list"></i>
-          </label>
-
-          <button
-            class="icon outline"
-            type="button"
-            onclick=${() => (this.showAddNoteForm.value = !this.showAddNoteForm.value)}
-          >
-            <i class="gg-chevron-up"></i>
-          </button>
-        </div>
-
-        <input
-          type="text"
-          placeholder="my note"
-          value=${this.selectedNote.value?.title}
-          onchange=${ev => {
-            updateSelectedNote(this.selectedNote, {
-              title: ev.target.value,
-            })
+            if (this.toDo.value) {
+              this.selectedNote.value = blankTodoNote
+            } else {
+              this.selectedNote.value = blankTextNote
+            }
           }}
-        />
+        >
+          <div class="header">
+            <label>
+              <i class="gg-format-text"></i>&nbsp;
+              <input
+                type="checkbox"
+                role="switch"
+                ?checked=${this.toDo.value}
+                onclick=${() => {
+                  this.toDo.value = !this.toDo.value
+                  this.selectedNote.value = this.toDo.value ? blankTodoNote : blankTextNote
+                }}
+              />
+              <i class="gg-user-list"></i>
+            </label>
 
-        ${this.selectedNote.value?.type === 'todo'
-          ? html`<todo-editor .selectedNote=${this.selectedNote} />`
-          : undefined}
-        ${this.selectedNote.value?.type === 'text'
-          ? html`<rich-editor .selectedNote=${this.selectedNote} />`
-          : undefined}
+            <button
+              class="icon outline"
+              type="button"
+              onclick=${() => (this.showAddNoteForm.value = !this.showAddNoteForm.value)}
+            >
+              <i class="gg-chevron-up"></i>
+            </button>
+          </div>
 
-        <button type="submit"><i class="gg-push-down"></i></button>
-      </form>
+          <input
+            type="text"
+            placeholder="my note"
+            value=${this.selectedNote.value?.title}
+            onchange=${ev => {
+              updateSelectedNote(this.selectedNote, {
+                title: ev.target.value,
+              })
+            }}
+          />
+
+          ${this.selectedNote.value?.type === 'todo'
+            ? html`<todo-editor .selectedNote=${this.selectedNote} />`
+            : undefined}
+          ${this.selectedNote.value?.type === 'text'
+            ? html`<rich-editor .selectedNote=${this.selectedNote} />`
+            : undefined}
+
+          <button type="submit"><i class="gg-push-down"></i></button>
+        </form>
+      </reveal-panel>
 
       <div class="action-bar">
         <input type="search" is="search-note" />
