@@ -11,7 +11,7 @@ customElements.define(
     connectedCallback() {
       this.value = ''
       this.addEventListener('input', e => {
-        searchTerm.value = e.target.value
+        searchTerm.value = e.target.value.toLocaleLowerCase()
       })
     }
   },

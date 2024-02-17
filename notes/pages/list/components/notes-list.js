@@ -114,9 +114,9 @@ customElements.define(
         ${this.notes.value
           .filter(note => {
             const termMatch = searchTerm.value
-              ? (note.text || note.todos.map(({ text }) => text).join(' ')).includes(
-                  searchTerm.value,
-                )
+              ? (note.title + (note.text || note.todos.map(({ text }) => text).join(' ')))
+                  .toLocaleLowerCase()
+                  .includes(searchTerm.value)
               : true
             const archivedMatch =
               searchParams.value.get('showArchived') === 'true' ? true : !note.archived
