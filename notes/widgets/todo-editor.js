@@ -71,6 +71,9 @@ customElements.define(
       updateSelectedNote(this.selectedNote, {
         todos: this.selectedNote.value.todos.concat(createEmptyTodo()),
       })
+      setTimeout(() => {
+        this.querySelector('li:last-of-type input[type="text"]').focus()
+      }, 0)
     }
 
     delTodo(id) {
