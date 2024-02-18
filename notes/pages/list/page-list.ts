@@ -173,7 +173,7 @@ customElements.define(
           <input
             type="checkbox"
             ?checked=${searchParams.value.get('showArchived') === 'true'}
-            onlick=${(ev: HTMLInputEvent) => {
+            onclick=${(ev: HTMLInputEvent) => {
               setSearchParams({ showArchived: ev.target.checked })
             }}
           />
