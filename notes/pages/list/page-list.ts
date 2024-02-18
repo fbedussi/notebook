@@ -1,35 +1,46 @@
-import { render, html, signal } from 'uhtml/preactive'
-import { css, searchParams, setSearchParams } from '../../../custom-elements-utils.js'
-import { updateSelectedNote } from '../../helpers.js'
-import { addNote } from '../../../backend.js'
+import { render, html, signal, Signal } from 'uhtml/preactive'
+import { css, searchParams, setSearchParams } from '../../../custom-elements-utils'
+import { updateSelectedNote } from '../../helpers'
+import { addNote } from '../../../backend'
+import { HTMLInputEvent, Note } from '../../model'
 
-import './components/notes-list.js'
-import './components/search-note.js'
-import '../../widgets/todo-editor.js'
-import '../../widgets/rich-editor.js'
-import '../../widgets/delete-button.js'
-import '../../widgets/reveal-panel.js'
+import './components/notes-list'
+import './components/search-note'
+import '../../widgets/todo-editor'
+import '../../widgets/rich-editor'
+import '../../widgets/delete-button'
+import '../../widgets/reveal-panel'
 
-const blankTextNote = {
-  type: 'text',
+const blankNote = {
   title: '',
   text: '',
   todos: [],
+  createdAt: 0,
+  updatedAt: 0,
+  version: 0,
 }
 
-const blankTodoNote = {
+const blankTextNote: Omit<Note, 'id'> = {
+  type: 'text',
+  ...blankNote,
+}
+
+const blankTodoNote: Omit<Note, 'id'> = {
   type: 'todo',
-  title: '',
-  text: '',
-  todos: [],
+  ...blankNote,
 }
 
 const EL_NAME = 'page-list'
 customElements.define(
   EL_NAME,
   class extends HTMLElement {
+    showAddNoteForm: Signal<boolean>
+    selectedNote: Signal<Omit<Note, 'id'>>
+    toDo: Signal<boolean>
+
     constructor() {
       super()
+
       css`
         ${EL_NAME} {
           display: flex;
@@ -61,13 +72,14 @@ customElements.define(
           }
         }
       `
-    }
 
-    connectedCallback() {
       this.showAddNoteForm = signal(false)
 
       this.selectedNote = signal(blankTextNote)
       this.toDo = signal(false)
+    }
+
+    connectedCallback() {
       render(this, this.render)
     }
 
@@ -97,7 +109,7 @@ customElements.define(
 
       <reveal-panel transition="300" ?open=${this.showAddNoteForm.value}>
         <form
-          onsubmit=${ev => {
+          onsubmit=${(ev: SubmitEvent) => {
             ev.preventDefault()
 
             addNote(this.selectedNote.value)
@@ -137,7 +149,7 @@ customElements.define(
             type="text"
             placeholder="my note"
             value=${this.selectedNote.value?.title}
-            onchange=${ev => {
+            onchange=${(ev: HTMLInputEvent) => {
               updateSelectedNote(this.selectedNote, {
                 title: ev.target.value,
               })
@@ -161,7 +173,7 @@ customElements.define(
           <input
             type="checkbox"
             ?checked=${searchParams.value.get('showArchived') === 'true'}
-            onclick=${ev => {
+            onlick=${(ev: HTMLInputEvent) => {
               setSearchParams({ showArchived: ev.target.checked })
             }}
           />

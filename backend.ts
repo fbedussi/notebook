@@ -1,11 +1,11 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'
+import { initializeApp } from 'firebase/app'
 import {
   browserLocalPersistence,
   getAuth,
   setPersistence,
   signInWithEmailAndPassword,
   signOut,
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js'
+} from 'firebase/auth'
 import {
   enableIndexedDbPersistence,
   getFirestore,
@@ -17,8 +17,10 @@ import {
   addDoc,
   deleteDoc,
   updateDoc,
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
+} from 'firebase/firestore'
 import { getUserId } from './auth'
+import { Signal } from '@preact/signals-core'
+import { Note } from './notes/model'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyB-iin2A3RiV652mi3H1Y0PN-ErlL6HKY0',
@@ -54,7 +56,7 @@ enableIndexedDbPersistence(db).catch(err => {
   }
 })
 
-export const loginBe = async ({ email, password }) => {
+export const loginBe = async ({ email, password }: { email: string; password: string }) => {
   const auth = getAuth(app)
   await setPersistence(auth, browserLocalPersistence)
   const response = await signInWithEmailAndPassword(auth, email, password)
@@ -82,22 +84,27 @@ const baseNote = {
   createdAt: 0,
 }
 
-export const getNotes = async (userId, notes) => {
+export const getNotes = async (notes: Signal<Note[]>) => {
+  const userId = getUserId()
+  if (!userId) {
+    throw new Error('user is not logged in')
+  }
+
   const q = query(collection(db, NOTES_COLLECTION_NAME), where('userId', '==', userId))
   onSnapshot(q, querySnapshot => {
-    const updatedNotes = []
+    const updatedNotes: Note[] = []
     querySnapshot.forEach(doc => {
       updatedNotes.push({
         ...baseNote,
+        ...(doc.data() as Note),
         id: doc.id,
-        ...doc.data(),
       })
     })
     notes.value = updatedNotes
   })
 }
 
-export const getNote = async (id, note, forceUpdate) => {
+export const getNote = async (id: string, note: Signal<Note | null>, forceUpdate?: boolean) => {
   const userId = getUserId()
   const q = query(
     collection(db, NOTES_COLLECTION_NAME),
@@ -105,12 +112,12 @@ export const getNote = async (id, note, forceUpdate) => {
     where('userId', '==', userId),
   )
   onSnapshot(q, querySnapshot => {
-    const updatedNotes = []
+    const updatedNotes: Note[] = []
     querySnapshot.forEach(doc => {
       updatedNotes.push({
         ...baseNote,
+        ...(doc.data() as Note),
         id: doc.id,
-        ...doc.data(),
       })
     })
     const updatedNote = updatedNotes[0]
@@ -121,7 +128,7 @@ export const getNote = async (id, note, forceUpdate) => {
   })
 }
 
-export const addNote = async note => {
+export const addNote = async (note: Omit<Note, 'createdAt' | 'id'>) => {
   const userId = getUserId()
 
   const timestamp = new Date().getTime()
@@ -135,11 +142,15 @@ export const addNote = async note => {
     })
     return docRef.id
   } catch (err) {
-    console.error(JSON.stringify(err))
+    throw err
   }
 }
 
-export const updateNote = async note => {
+export const updateNote = async (note: Note | null) => {
+  if (!note) {
+    return
+  }
+
   const timestamp = new Date().getTime()
 
   try {
@@ -154,4 +165,4 @@ export const updateNote = async note => {
   }
 }
 
-export const deleteNote = id => deleteDoc(doc(db, NOTES_COLLECTION_NAME, id))
+export const deleteNote = (id: string) => deleteDoc(doc(db, NOTES_COLLECTION_NAME, id))

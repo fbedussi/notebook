@@ -1,4 +1,4 @@
-import { searchTerm } from '../../../state.js'
+import { searchTerm } from '../../../state'
 
 const EL_NAME = 'search-note'
 customElements.define(
@@ -11,7 +11,7 @@ customElements.define(
     connectedCallback() {
       this.value = ''
       this.addEventListener('input', e => {
-        searchTerm.value = e.target.value.toLocaleLowerCase()
+        searchTerm.value = (e.target as HTMLInputElement).value.toLocaleLowerCase()
       })
     }
   },

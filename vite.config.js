@@ -11,6 +11,7 @@ export default defineConfig({
           if (
             req.url.startsWith('/notes/') &&
             !req.url.includes('.js') &&
+            !req.url.includes('.ts') &&
             !req.url.includes('.css')
           ) {
             const qs = req.url.split('?')[1]

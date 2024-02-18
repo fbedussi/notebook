@@ -1,8 +1,8 @@
 import { render, html } from 'uhtml/preactive'
-import { protectedPage } from '../auth.js'
+import { protectedPage } from '../auth'
 import { app } from 'a-route'
-import './pages/list/page-list.js'
-import './pages/single/page-single.js'
+import './pages/list/page-list'
+import './pages/single/page-single'
 
 protectedPage()
 
@@ -14,7 +14,7 @@ app
   .use('/notes/?showArchived=:showArchived', function () {
     render(host, () => html`<page-list />`)
   })
-  .use('/notes/:id', function (ctx) {
+  .use('/notes/:id', function (ctx: { params: { id: string } }) {
     render(host, () => html`<page-single id=${ctx.params.id} />`)
   })
 

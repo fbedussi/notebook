@@ -1,15 +1,17 @@
-import { css } from '../../custom-elements-utils.js'
+import { css } from '../../custom-elements-utils'
 
 const EL_NAME = 'reveal-panel'
 customElements.define(
   EL_NAME,
   class extends HTMLElement {
+    transition = '250'
+
     constructor() {
       super()
     }
 
     connectedCallback() {
-      this.transition = this.getAttribute('transition')
+      this.transition = this.getAttribute('transition') || this.transition
 
       css`
         ${EL_NAME} {

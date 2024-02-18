@@ -1,9 +1,10 @@
-import { render, html } from 'uhtml/preactive'
+import { render, html, Signal } from 'uhtml/preactive'
 import { htmlFor } from 'uhtml/keyed'
-import { css } from '../../custom-elements-utils.js'
-import { updateSelectedNote } from '../helpers.js'
+import { css } from '../../custom-elements-utils'
+import { updateSelectedNote } from '../helpers'
+import { HTMLInputEvent, Note, Todo } from '../model'
 
-const createEmptyTodo = () => {
+const createEmptyTodo = (): Todo => {
   return {
     id: crypto.randomUUID(),
     text: '',
@@ -15,6 +16,8 @@ const EL_NAME = 'todo-editor'
 customElements.define(
   EL_NAME,
   class extends HTMLElement {
+    selectedNote?: Signal<Note>
+
     constructor() {
       super()
 
@@ -44,48 +47,53 @@ customElements.define(
     }
 
     connectedCallback() {
-      if (this.selectedNote.value.type !== 'todo') {
+      if (this.selectedNote?.value?.type !== 'todo') {
         throw new Error('todo-editor must be used with todo type notes')
       }
 
       render(this, this.render)
     }
 
-    toggleDone(id) {
-      updateSelectedNote(this.selectedNote, {
-        todos: this.selectedNote.value.todos.map(todo =>
-          todo.id === id ? { ...todo, done: !todo.done } : todo,
-        ),
-      })
+    toggleDone(id: string) {
+      this.selectedNote &&
+        updateSelectedNote(this.selectedNote, {
+          todos: this.selectedNote.value.todos.map(todo =>
+            todo.id === id ? { ...todo, done: !todo.done } : todo,
+          ),
+        })
     }
 
-    setText(id, text) {
-      updateSelectedNote(this.selectedNote, {
-        todos: this.selectedNote.value.todos.map(todo =>
-          todo.id === id ? { ...todo, text } : todo,
-        ),
-      })
+    setText(id: string, text: string) {
+      this.selectedNote &&
+        updateSelectedNote(this.selectedNote, {
+          todos: this.selectedNote.value.todos.map(todo =>
+            todo.id === id ? { ...todo, text } : todo,
+          ),
+        })
     }
 
     addTodo() {
-      updateSelectedNote(this.selectedNote, {
-        todos: this.selectedNote.value.todos.concat(createEmptyTodo()),
-      })
+      this.selectedNote &&
+        updateSelectedNote(this.selectedNote, {
+          todos: this.selectedNote.value.todos.concat(createEmptyTodo()),
+        })
       setTimeout(() => {
-        this.querySelector('li:last-of-type input[type="text"]').focus()
+        ;(this.querySelector('li:last-of-type input[type="text"]') as HTMLElement).focus()
       }, 0)
     }
 
-    delTodo(id) {
-      updateSelectedNote(this.selectedNote, {
-        todos: this.selectedNote.value.todos.filter(todo => todo.id !== id),
-      })
+    delTodo(id: string) {
+      this.selectedNote &&
+        updateSelectedNote(this.selectedNote, {
+          todos: this.selectedNote.value.todos.filter(todo => todo.id !== id),
+        })
     }
 
     delDone() {
-      updateSelectedNote(this.selectedNote, {
-        todos: this.selectedNote.value.todos.filter(todo => !todo.done),
-      })
+      this.selectedNote &&
+        updateSelectedNote(this.selectedNote, {
+          todos: this.selectedNote.value.todos.filter(todo => !todo.done),
+        })
     }
 
     render = () => html`
@@ -94,28 +102,32 @@ customElements.define(
         Delete all done
       </button>
       <ol>
-        ${this.selectedNote.value?.todos.map(todo => this.renderTodo(todo, todo.id))}
+        ${this.selectedNote?.value?.todos.map(todo => this.renderTodo(todo, todo.id))}
         <button type="button" class="outline" onclick=${() => this.addTodo()}>
           <i class="gg-add"></i>
         </button>
       </ol>
     `
 
-    renderTodo = (todo, key) => htmlFor(this.renderTodo, key)`<li
+    renderTodo = (todo: Todo, key: string) => htmlFor(this.renderTodo, key)`<li
               draggable="true"
-              ondragstart=${ev => {
-                ev.dataTransfer.setData('text/plain', todo.id)
-                ev.dataTransfer.setData('text/html', ev.target.outerHTML)
+              ondragstart=${(ev: DragEvent & { target: HTMLElement }) => {
+                ev.dataTransfer?.setData('text/plain', todo.id)
+                ev.dataTransfer?.setData('text/html', ev.target.outerHTML)
               }}
-              ondragover=${ev => {
+              ondragover=${(ev: DragEvent & { dataTransfer: DataTransfer }) => {
                 ev.preventDefault()
                 ev.dataTransfer.dropEffect = 'move'
               }}
-              ondragenter=${ev => {
+              ondragenter=${(ev: DragEvent) => {
                 ev.preventDefault()
               }}
-              ondrop=${ev => {
+              ondrop=${(ev: DragEvent & { dataTransfer: DataTransfer }) => {
                 ev.preventDefault()
+                if (!this.selectedNote) {
+                  return
+                }
+
                 const idToMove = ev.dataTransfer.getData('text/plain')
                 const itemToMoveIndex = this.selectedNote.value.todos.findIndex(
                   todo => todo.id === idToMove,
@@ -144,7 +156,7 @@ customElements.define(
                 class=${['underlined', todo.done ? 'todo-done' : ''].join(' ')}
                 type="text"
                 value=${todo.text}
-                oninput=${ev => this.setText(todo.id, ev.target.value)}
+                oninput=${(ev: HTMLInputEvent) => this.setText(todo.id, ev.target.value)}
               />
               <button type="button" class="outline" onclick=${() => this.delTodo(todo.id)}>
                 <i class="gg-trash"></i>

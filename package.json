@@ -5,21 +5,27 @@
   "type": "module",
   "scripts": {
     "start": "vite",
+    "type-check": "tsc --noEmit",
     "build": "vite build",
     "preview": "vite preview"
   },
   "author": "Francesco Bedussi",
   "license": "ISC",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
+    "@typescript-eslint/parser": "^7.0.1",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.1",
     "prettier": "3.2.4",
+    "typescript": "^5.3.3",
     "vite": "^5.0.8"
   },
   "dependencies": {
     "a-route": "^1.1.1",
+    "firebase": "^10.8.0",
     "lodash": "^4.17.21",
+    "tinymce": "^6.8.3",
     "uhtml": "^4.4.8"
   }
 }
