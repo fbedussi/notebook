@@ -22,7 +22,6 @@
     "vite": "^5.0.8"
   },
   "dependencies": {
-    "a-route": "^1.1.1",
     "firebase": "^10.8.0",
     "lodash": "^4.17.21",
     "tinymce": "^6.8.3",

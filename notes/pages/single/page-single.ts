@@ -83,7 +83,6 @@ customElements.define(
             href=${history.state !== window.location.href && history.state
               ? history.state.substring(window.location.origin.length)
               : '/notes/'}
-            is="a-route"
             ><i class="gg-arrow-left"></i
           ></a>
           <input

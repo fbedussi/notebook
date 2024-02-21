@@ -102,7 +102,7 @@ customElements.define(
           </main>
 
           <footer>
-            <a is="a-route" href=${`/notes/${this.note.id}`}
+            <a href=${`/notes/${this.note.id}`}
               ><i class="gg-details-more"></i> <i class="gg-arrow-right"></i
             ></a>
           </footer>
