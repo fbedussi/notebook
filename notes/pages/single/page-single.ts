@@ -84,7 +84,7 @@ customElements.define(
           <a
             href=${history.state !== window.location.href && history.state
               ? history.state.substring(window.location.origin.length)
-              : '/notes/'}
+              : '/notebook/notes/'}
             ><i class="gg-arrow-left"></i
           ></a>
           <input
@@ -124,7 +124,7 @@ customElements.define(
                 todos: this.selectedNote.value.todos,
                 version: 1,
               }).then(noteId => {
-                history.replaceState(undefined, '', `/notes/${noteId}`)
+                history.replaceState(undefined, '', `/notebook/notes/${noteId}`)
                 getNote(noteId, this.selectedNote, true)
                 setTimeout(() => {
                   ;(this.querySelector('header input') as HTMLInputElement | null)?.focus()

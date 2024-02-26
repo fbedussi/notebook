@@ -37,8 +37,8 @@ customElements.define(
               this.noteId &&
                 deleteNote(this.noteId)
                   .then(() => {
-                    if (window.location.pathname !== '/notes/') {
-                      window.location.href = '/notes/'
+                    if (window.location.pathname !== '/notebook/notes/') {
+                      window.location.href = '/notebook/notes/'
                     }
                     dialog.current?.close()
                   })
