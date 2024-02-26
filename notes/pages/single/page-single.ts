@@ -51,7 +51,9 @@ customElements.define(
       this.selectedNote = signal(null)
     }
 
-    debouncedUpdateNote = debounce(() => updateNote(this.selectedNote.value), 1000)
+    debouncedUpdateNote = debounce(() => {
+      updateNote(this.selectedNote.value)
+    }, 1000)
 
     connectedCallback() {
       this.noteId = this.getAttribute('id')
@@ -124,6 +126,9 @@ customElements.define(
               }).then(noteId => {
                 history.replaceState(undefined, '', `/notes/${noteId}`)
                 getNote(noteId, this.selectedNote, true)
+                setTimeout(() => {
+                  ;(this.querySelector('header input') as HTMLInputElement | null)?.focus()
+                }, 0)
               })
             }}
           >
