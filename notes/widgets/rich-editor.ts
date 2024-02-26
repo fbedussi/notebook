@@ -33,7 +33,6 @@ customElements.define(
     }
 
     disconnectedCallback() {
-      this.editor?.setContent('')
       tinymce.remove('#editor')
     }
 
