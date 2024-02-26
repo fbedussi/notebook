@@ -17,6 +17,7 @@ customElements.define(
   EL_NAME,
   class extends HTMLElement {
     selectedNote?: Signal<Note>
+    hideDeleteDone?: boolean
 
     constructor() {
       super()
@@ -50,6 +51,8 @@ customElements.define(
       if (this.selectedNote?.value?.type !== 'todo') {
         throw new Error('todo-editor must be used with todo type notes')
       }
+
+      this.hideDeleteDone = !!this.getAttribute('hideDeleteDone')
 
       render(this, this.render)
     }
@@ -97,10 +100,12 @@ customElements.define(
     }
 
     render = () => html`
-      <button class="outline" onclick=${() => this.delDone()}>
-        <i class="gg-trash"></i>
-        Delete all done
-      </button>
+      ${!this.hideDeleteDone
+        ? html`<button class="outline" onclick=${() => this.delDone()}>
+            <i class="gg-trash"></i>
+            Delete all done
+          </button>`
+        : null}
       <ol>
         ${this.selectedNote?.value?.todos.map(todo => this.renderTodo(todo, todo.id))}
         <button type="button" class="outline" onclick=${() => this.addTodo()}>

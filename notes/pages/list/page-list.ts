@@ -157,7 +157,7 @@ customElements.define(
           />
 
           ${this.selectedNote.value?.type === 'todo'
-            ? html`<todo-editor .selectedNote=${this.selectedNote} />`
+            ? html`<todo-editor .selectedNote=${this.selectedNote} hideDeleteDone=${true} />`
             : undefined}
           ${this.selectedNote.value?.type === 'text'
             ? html`<rich-editor .selectedNote=${this.selectedNote} />`
